@@ -30,26 +30,10 @@ public class logon extends AppCompatActivity {
         password = findViewById(R.id.password);
         login.setEnabled(false);
 
-
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //We check the user input to enabled the login button
-                login.setEnabled(s.toString().length() != 0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+        username.addTextChangedListener(loginTextWatcher);
+        password.addTextChangedListener(loginTextWatcher);
 
 
-        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +43,27 @@ public class logon extends AppCompatActivity {
             }
         });
     }
+
+    TextWatcher loginTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //Enabled the login button only if we write in username and password 
+            String usernameInput = username.getText().toString().trim();
+            String passwordInput = password.getText().toString().trim();
+            login.setEnabled(!usernameInput.isEmpty() && !passwordInput.isEmpty());
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
 
 }
