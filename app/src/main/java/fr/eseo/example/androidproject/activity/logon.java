@@ -1,14 +1,21 @@
-package fr.eseo.example.androidproject;
+package fr.eseo.example.androidproject.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import fr.eseo.example.androidproject.R;
+import fr.eseo.example.androidproject.api.User;
+import fr.eseo.example.androidproject.api.Utils;
 
 public class logon extends AppCompatActivity {
 
@@ -17,6 +24,7 @@ public class logon extends AppCompatActivity {
     private EditText password;
     private String name;
     private String pass;
+    private Context ctx;
 
 
 
@@ -29,6 +37,7 @@ public class logon extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login.setEnabled(false);
+        ctx = this.getApplicationContext();
 
         username.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
@@ -37,7 +46,9 @@ public class logon extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = (username.getText().toString());
+                User user = new User(username.getText().toString(), password.getText().toString());
+                LoginRequest loginRequest = new LoginRequest();
+                loginRequest.execute(user.buildUrl());
                 System.out.println(name);
 
             }
@@ -64,6 +75,24 @@ public class logon extends AppCompatActivity {
 
         }
     };
+
+    class LoginRequest extends AsyncTask<String, Void, String> {
+
+        private static final String GET_METHOD = "GET";
+
+        @Override
+        protected String doInBackground(String... params) {
+            String urlString = params[0];
+            String result = "";
+            result = Utils.readStream(Utils.sendRequestWS(urlString, GET_METHOD, ctx));
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
 
 
 }
