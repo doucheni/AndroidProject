@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
@@ -65,15 +64,22 @@ public class logon extends AppCompatActivity{
                 loginRequest = new LoginRequest();
                 User user = new User(username.getText().toString(), password.getText().toString());
 
-                String urlRequest = user.buildUrl();
+                String urlRequestLogin = user.buildUrlForLogin();
+
                 try {
-                    InputStream resultStream = loginRequest.execute(urlRequest).get();
+                    InputStream resultStream = loginRequest.execute(urlRequestLogin).get();
                     if( resultStream != null){
                         JSONObject resultJSON = Utils.getJSONFromString(Utils.readStream(resultStream));
                         if(Utils.getJSONValue(resultJSON, "result").equals("KO")){
                             Toast.makeText(logon.this, "Identifiant ou mot de passe incorrect", Toast.LENGTH_LONG).show();
                         }else{
-                            Log.d("token", Utils.getJSONValue(resultJSON, "token"));
+                            user.setToken(Utils.getJSONValue(resultJSON, "token"));
+                            String urlRequestStatus = user.buildUrlForStatus();
+                            InputStream resultStatus = new RequestForAPI().execute(urlRequestStatus,"GET").get();
+                            if(resultStatus != null){
+                                Log.d("status", Utils.readStream(resultStatus));
+                            }
+
                         }
                     }
                 } catch (ExecutionException | InterruptedException e) {
@@ -161,6 +167,38 @@ public class logon extends AppCompatActivity{
             }
 
             return null;
+        }
+    }
+
+    class RequestForAPI extends AsyncTask<String, Void, InputStream>{
+        private ProgressDialog progress;
+        private LoginRequest loginRequest;
+
+        @Override
+        protected void onPreExecute(){
+            progress = ProgressDialog.show(logon.this, "Chargement", "Juste un instant ...",true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected InputStream doInBackground(String... params) {
+            String urlString = params[0];
+            String method = params[1];
+            InputStream result;
+            result = Utils.sendRequestWS(urlString, method, sslSocket);
+
+            if(result == null){
+                progress.dismiss();
+                errorConnectionToast.show();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(InputStream result) {
+            progress.dismiss();
+            super.onPostExecute(result);
         }
     }
 
