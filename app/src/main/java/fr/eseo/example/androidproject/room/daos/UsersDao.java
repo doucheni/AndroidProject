@@ -1,6 +1,7 @@
 package fr.eseo.example.androidproject.room.daos;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import fr.eseo.example.androidproject.room.entities.User;
 
+@Dao
 public interface UsersDao {
 
     @Query("SELECT * FROM Users")
