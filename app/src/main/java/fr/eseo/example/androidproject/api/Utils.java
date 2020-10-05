@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -24,7 +25,10 @@ import java.util.Iterator;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
+
+import org.apache.commons.io.IOUtils;
 
 import fr.eseo.example.androidproject.R;
 
@@ -34,9 +38,9 @@ import fr.eseo.example.androidproject.R;
 public class Utils {
 
     // Timing of reading
-    private static final int READ_TIMEOUT = 15000;
+    private static final int READ_TIMEOUT = 5000;
     // Timing of connection
-    private static final int CONNECTION_TIMEOUT = 15000;
+    private static final int CONNECTION_TIMEOUT = 1000;
 
     /**
      * Configuration of SSLContext
@@ -67,16 +71,8 @@ public class Utils {
             // Final Configuration of SSLContext
             sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
-        }catch (CertificateException ce){
+        }catch (CertificateException | IOException  | NoSuchAlgorithmException | KeyStoreException | KeyManagementException ce){
             ce.printStackTrace();
-        }catch (IOException ioe){
-            ioe.printStackTrace();
-        }catch(NoSuchAlgorithmException nsae){
-            nsae.printStackTrace();
-        }catch(KeyStoreException kse){
-            kse.printStackTrace();
-        }catch(KeyManagementException kme){
-            kme.printStackTrace();
         }
         return sslContext;
     }
@@ -85,32 +81,30 @@ public class Utils {
      * Send a request to the web service
      * @param url, url for the connection
      * @param requestMethod, methode's type (GET, POST, ...)
-     * @param ctx, activity's context
+     * @param sslSocket, SSLSocketFactory configured with certificate
      * @return responseStream, the output of the request
      */
-    public static InputStream sendRequestWS(String url, String requestMethod, Context ctx){
+    public static InputStream sendRequestWS(String url, String requestMethod, SSLSocketFactory sslSocket){
        InputStream responseStream = null;
         try {
             // URL creation
             URL url_connection = new URL(url);
             // Configuration connection with SSLContext
             HttpsURLConnection connection = (HttpsURLConnection)url_connection.openConnection();
-            connection.setSSLSocketFactory(Utils.configureSSLContext(ctx).getSocketFactory());
+            connection.setSSLSocketFactory(sslSocket);
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setRequestMethod(requestMethod);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
+            connection.connect();
 
-            // Send request
-            responseStream = connection.getInputStream();
+            if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
+                return connection.getInputStream();
+            }
 
-            Log.d("reponse",readStream(responseStream));
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch(IOException ioe){
+            return null;
         }
-        return responseStream;
+        return null;
     }
 
     /**
@@ -157,18 +151,29 @@ public class Utils {
      * @return sb, the equivalent String
      */
     public static String readStream(InputStream is){
-        StringBuilder sb = new StringBuilder();
-        BufferedReader r = new BufferedReader(new InputStreamReader(is), 1000);
+        String theString = "";
         try{
-            // Loop for each line in the InputStream
-            for (String line = r.readLine(); line != null; line = r.readLine()) {
-                // Affectation in StringBuilder
-                sb.append(line);
-            }
-            is.close();
+            theString = IOUtils.toString(is, StandardCharsets.UTF_8);
         }catch(IOException ioe){
             ioe.printStackTrace();
         }
-        return sb.toString();
+        return theString;
     }
+
+    /**
+     * Get a JSON object from a String object
+     * @param stringObject our String
+     * @return a JSONobject
+     */
+    public static JSONObject getJSONFromString(String stringObject){
+        JSONObject jsonObject = null;
+        Log.d("result", stringObject);
+        try{
+            jsonObject = new JSONObject(stringObject);
+        }catch (JSONException jsonE){
+            jsonE.printStackTrace();
+        }
+        return jsonObject;
+    }
+
 }

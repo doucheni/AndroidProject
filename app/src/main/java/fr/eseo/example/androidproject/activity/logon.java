@@ -1,7 +1,7 @@
 package fr.eseo.example.androidproject.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,14 +10,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.User;
 import fr.eseo.example.androidproject.api.Utils;
 
-public class logon extends AppCompatActivity {
+public class logon extends AppCompatActivity{
 
     private Button login;
     private EditText username;
@@ -25,32 +37,48 @@ public class logon extends AppCompatActivity {
     private String name;
     private String pass;
     private Context ctx;
+    private LoginRequest loginRequest;
+    private SSLSocketFactory sslSocket;
 
-
+    private Toast errorConnectionToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logon);
+
         login = findViewById(R.id.activity_logon_btn);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login.setEnabled(false);
         ctx = this.getApplicationContext();
-
         username.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
 
+        sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
+
+        errorConnectionToast = Toast.makeText(logon.this, "Erreur de connexion, vérifiez votre connexion à eduroam", Toast.LENGTH_SHORT);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loginRequest = new LoginRequest();
                 User user = new User(username.getText().toString(), password.getText().toString());
-                LoginRequest loginRequest = new LoginRequest();
-                loginRequest.execute(user.buildUrl());
-                System.out.println(name);
 
+                String urlRequest = user.buildUrl();
+                try {
+                    InputStream resultStream = loginRequest.execute(urlRequest).get();
+                    if( resultStream != null){
+                        JSONObject resultJSON = Utils.getJSONFromString(Utils.readStream(resultStream));
+                        if(Utils.getJSONValue(resultJSON, "result").equals("KO")){
+                            Toast.makeText(logon.this, "Identifiant ou mot de passe incorrect", Toast.LENGTH_LONG).show();
+                        }else{
+                            Log.d("token", Utils.getJSONValue(resultJSON, "token"));
+                        }
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -76,23 +104,64 @@ public class logon extends AppCompatActivity {
         }
     };
 
-    class LoginRequest extends AsyncTask<String, Void, String> {
+    class LoginRequest extends AsyncTask<String, Void, InputStream> {
 
+        private ProgressDialog progress;
         private static final String GET_METHOD = "GET";
+        private LoginRequest loginRequest;
 
         @Override
-        protected String doInBackground(String... params) {
+        protected void onPreExecute(){
+            progress = ProgressDialog.show(logon.this, "Chargement", "Juste un instant ...",true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected InputStream doInBackground(String... params) {
             String urlString = params[0];
-            String result = "";
-            result = Utils.readStream(Utils.sendRequestWS(urlString, GET_METHOD, ctx));
+            InputStream result;
+            result = Utils.sendRequestWS(urlString, GET_METHOD, sslSocket);
+
+            if(result == null){
+                progress.dismiss();
+                errorConnectionToast.show();
+            }
+
             return result;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(InputStream result) {
+            progress.dismiss();
             super.onPostExecute(result);
         }
-    }
 
+        @Override
+        protected void onCancelled(){
+            super.onCancelled();
+        }
+
+        public InputStream sendRequestWS(String url, String requestMethod, SSLSocketFactory sslSocket){
+            InputStream responseStream = null;
+            try {
+                    // URL creation
+                    URL url_connection = new URL(url);
+                    // Configuration connection with SSLContext
+                    HttpsURLConnection connection = (HttpsURLConnection)url_connection.openConnection();
+                    connection.setSSLSocketFactory(sslSocket);
+                    connection.setReadTimeout(5000);
+                    connection.setRequestMethod(requestMethod);
+                    connection.setConnectTimeout(1000);
+                    connection.connect();
+                    if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
+                        return connection.getInputStream();
+                    }
+            } catch (IOException ioe){
+                return null;
+            }
+
+            return null;
+        }
+    }
 
 }
