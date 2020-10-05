@@ -9,7 +9,6 @@ public class isMember {
     @Embedded
     private Project project;
 
-
     @Relation(parentColumn = "members", entityColumn = "userId", entity = User.class)
     private List<User> users;
 
