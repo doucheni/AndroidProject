@@ -10,20 +10,20 @@ import java.util.Date;
 
 @Entity(tableName = "Users")
 public class User {
-    @PrimaryKey
-    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="userId")
+    private int userId;
     private String username;
     private String forename;
     private String surname;
-    private int idRole;
-    private String descr;
 
-    public User(String username, String forename, String surname, int idRole, String descr){
+
+    public User(int userId,String username, String forename, String surname){
+        this.userId = userId;
         this.username = username;
         this.forename = forename;
         this.surname = surname;
-        this.idRole = idRole;
-        this.descr = descr;
+
     }
 
     public String getUsername(){ return username; }

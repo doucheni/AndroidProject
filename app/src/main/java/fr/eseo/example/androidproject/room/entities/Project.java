@@ -8,13 +8,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity (tableName = "Projects",
-        foreignKeys = {@ForeignKey(entity = Supervisor.class, childColumns = "supervisor_forename", parentColumns = "forename"),
-        @ForeignKey(entity= Supervisor.class, childColumns = "supervisor_surname", parentColumns = "surname"),
-        @ForeignKey(entity = Students.class, childColumns = "student_id", parentColumns = "studentId"),
-        @ForeignKey(entity = Students.class, childColumns = "student_forename", parentColumns = "studentForename"),
-        @ForeignKey(entity = Students.class, childColumns = "student_surname",parentColumns = "studentSurname") },
-        indices = {@Index(value= "supervisor_forename"), @Index(value = "supervisor_surname"),@Index(value="student_id"),
-        @Index(value = "student_forename"), @Index(value="studentSurname")})
+        foreignKeys = {@ForeignKey(entity = User.class, childColumns = "members", parentColumns = "userId"),
+        @ForeignKey(entity = Jury.class, childColumns = "jury", parentColumns = "idJury")})
 public class Project {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "projectId")
@@ -27,29 +22,26 @@ public class Project {
     private String poster;
     @ColumnInfo(name="confid")
     private int confid;
-    @ColumnInfo (name="supervisor_forename")
-    private String supervisorForename;
-    @ColumnInfo(name="supervisor_surname")
-    private String supervisorSurname;
-    @ColumnInfo(name="student_id")
-    private int studentId;
-    @ColumnInfo(name="student_forename")
-    private String studentForename;
-    @ColumnInfo(name="student_surname")
-    private String studentSurname;
+    @ColumnInfo(name="supervisor")
+    private String supervisor;
+    @ColumnInfo(name="jury")
+    private int jury;
 
-    public Project(int projectId, String title, String descrip, String poster, int confid, String supervisorForename, String supervisorSurname,
-                   int studentId, String studentForename, String studentSurname){
+
+    @ColumnInfo(name="members")
+    private int membersId;
+
+
+    public Project(int projectId, String title, String descrip, String poster, int confid, String supervisor, int jury, int membersId){
         this.projectId = projectId;
         this.title = title;
         this.descrip = descrip;
         this.poster = poster;
         this.confid = confid;
-        this.supervisorForename = supervisorForename;
-        this.supervisorSurname = supervisorSurname;
-        this.studentId = studentId;
-        this.studentForename = studentForename;
-        this.studentSurname = studentSurname;
+        this.supervisor = supervisor;
+        this.jury = jury;
+        this.membersId = membersId;
+
     }
 
     public int getProjectId(){ return projectId;}
@@ -85,44 +77,26 @@ public class Project {
     public void setConfid(int confid) {
         this.confid = confid;
     }
-
-    public String getSupervisorForename() {
-        return supervisorForename;
+    public String getSupervisor() {
+        return supervisor;
     }
 
-    public void setSupervisorForename(String supervisorForename) {
-        this.supervisorForename = supervisorForename;
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
     }
 
-    public String getSupervisorSurname() {
-        return supervisorSurname;
+    public int getJury() {
+        return jury;
     }
 
-    public void setSupervisorSurname(String supervisorSurname) {
-        this.supervisorSurname = supervisorSurname;
+    public void setJury(int jury) {
+        this.jury = jury;
+    }
+    public int getMembersId() {
+        return membersId;
     }
 
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentForename() {
-        return studentForename;
-    }
-
-    public void setStudentForename(String studentForename) {
-        this.studentForename = studentForename;
-    }
-
-    public String getStudentSurname() {
-        return studentSurname;
-    }
-
-    public void setStudentSurname(String studentSurname) {
-        this.studentSurname = studentSurname;
+    public void setMembersId(int membersId) {
+        this.membersId = membersId;
     }
 }
