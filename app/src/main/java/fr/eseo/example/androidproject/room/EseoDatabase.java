@@ -14,7 +14,7 @@ import fr.eseo.example.androidproject.room.entities.Project;
 import fr.eseo.example.androidproject.room.entities.User;
 import fr.eseo.example.androidproject.room.entities.isMember;
 
-@Database(entities = {isMember.class, Jury.class, Project.class, User.class}, version = 1, exportSchema = true)
+@Database(entities = {Jury.class, Project.class, User.class}, version = 1, exportSchema = true)
 @TypeConverters(value = {DataConverters.Date.class})
 public abstract class EseoDatabase extends RoomDatabase {
     

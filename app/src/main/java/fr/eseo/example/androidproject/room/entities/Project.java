@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
         foreignKeys = {@ForeignKey(entity = User.class, childColumns = "members", parentColumns = "userId"),
         @ForeignKey(entity = Jury.class, childColumns = "jury", parentColumns = "idJury")})
 public class Project {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "projectId")
     private int projectId;
     @ColumnInfo(name="title")
