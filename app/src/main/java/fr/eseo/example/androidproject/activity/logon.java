@@ -85,9 +85,10 @@ public class logon extends AppCompatActivity{
                                 Log.d("role", Utils.getJSONValue(jsonValue, "descr"));
                                 switch(Utils.getJSONValue(jsonValue, "descr")){
                                     case "Service Communications" :
-                                        Log.d("result", "Salut les nuls de la communication");
+                                        String username = Utils.getJSONValue(jsonValue,"username");
                                         Intent intent = new Intent(ctx, ProjectCommActivity.class);
                                         intent.putExtra("TOKEN", token);
+                                        intent.putExtra("USERNAME", username);
                                         startActivity(intent);
                                         break;
                                 }

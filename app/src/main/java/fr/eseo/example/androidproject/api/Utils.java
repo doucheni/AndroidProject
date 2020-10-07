@@ -93,18 +93,24 @@ public class Utils {
             // Configuration connection with SSLContext
             HttpsURLConnection connection = (HttpsURLConnection)url_connection.openConnection();
             connection.setSSLSocketFactory(sslSocket);
-            connection.setReadTimeout(READ_TIMEOUT);
+            //connection.setReadTimeout(READ_TIMEOUT);
             connection.setRequestMethod(requestMethod);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
+            //connection.setConnectTimeout(CONNECTION_TIMEOUT);
             connection.connect();
 
+            Log.d("Response code",String.valueOf(connection.getResponseCode()));
+
             if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
-                return connection.getInputStream();
+                InputStream resultStream = connection.getInputStream();
+                Log.d("resultStream","" + resultStream);
+                return resultStream;
             }
 
         }catch(IOException ioe){
+            Log.d("error", "error : ", ioe);
             return null;
         }
+        Log.d("null", "default null");
         return null;
     }
 
