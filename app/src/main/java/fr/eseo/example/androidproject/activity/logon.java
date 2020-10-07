@@ -2,6 +2,7 @@ package fr.eseo.example.androidproject.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -73,11 +75,22 @@ public class logon extends AppCompatActivity{
                         if(Utils.getJSONValue(resultJSON, "result").equals("KO")){
                             Toast.makeText(logon.this, "Identifiant ou mot de passe incorrect", Toast.LENGTH_LONG).show();
                         }else{
-                            user.setToken(Utils.getJSONValue(resultJSON, "token"));
+                            String token = Utils.getJSONValue(resultJSON, "token");
+                            user.setToken(token);
                             String urlRequestStatus = user.buildUrlForStatus();
                             InputStream resultStatus = new RequestForAPI().execute(urlRequestStatus,"GET").get();
                             if(resultStatus != null){
-                                Log.d("status", Utils.readStream(resultStatus));
+                                JSONObject jsonRole = Utils.getJSONFromString(Utils.readStream(resultStatus));
+                                JSONArray jsonValue = Utils.getJSONFromJSON(jsonRole,"info");
+                                Log.d("role", Utils.getJSONValue(jsonValue, "descr"));
+                                switch(Utils.getJSONValue(jsonValue, "descr")){
+                                    case "Service Communications" :
+                                        Log.d("result", "Salut les nuls de la communication");
+                                        Intent intent = new Intent(ctx, ProjectCommActivity.class);
+                                        intent.putExtra("TOKEN", token);
+                                        startActivity(intent);
+                                        break;
+                                }
                             }
 
                         }

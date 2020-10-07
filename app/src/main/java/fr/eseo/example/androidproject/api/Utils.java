@@ -3,6 +3,7 @@ package fr.eseo.example.androidproject.api;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,6 +125,18 @@ public class Utils {
         return value;
     }
 
+    public static String getJSONValue(JSONArray jsonArray, String name){
+        String value = null;
+        for(int i = 0; i < jsonArray.length(); i++){
+            try{
+                value = jsonArray.getJSONObject(i).getString(name);
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+        return  value;
+    }
+
     /**
      * Get all the data from a JSONObject
      * @param jsonObject, our JSONObject
@@ -174,6 +187,16 @@ public class Utils {
             jsonE.printStackTrace();
         }
         return jsonObject;
+    }
+
+    public static JSONArray getJSONFromJSON(JSONObject jsonObject, String nameValue){
+        JSONArray jsonResult = null;
+        try{
+            jsonResult = jsonObject.getJSONArray(nameValue);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        return jsonResult;
     }
 
 }
