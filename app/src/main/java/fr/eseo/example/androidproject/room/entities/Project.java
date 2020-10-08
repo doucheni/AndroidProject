@@ -19,7 +19,7 @@ public class Project {
     @ColumnInfo(name="description")
     private String descrip;
     @ColumnInfo(name="poster")
-    private String poster;
+    private Boolean poster;
     @ColumnInfo(name="confid")
     private int confid;
     @ColumnInfo(name="supervisor")
@@ -32,7 +32,7 @@ public class Project {
     private int membersId;
 
 
-    public Project(int projectId, String title, String descrip, String poster, int confid, String supervisor, int jury, int membersId){
+    public Project(int projectId, String title, String descrip, Boolean poster, int confid, String supervisor, int jury, int membersId){
         this.projectId = projectId;
         this.title = title;
         this.descrip = descrip;
@@ -62,11 +62,11 @@ public class Project {
         this.descrip = descrip;
     }
 
-    public String getPoster() {
+    public Boolean getPoster() {
         return poster;
     }
 
-    public void setPoster(String poster) {
+    public void setPoster(Boolean poster) {
         this.poster = poster;
     }
 

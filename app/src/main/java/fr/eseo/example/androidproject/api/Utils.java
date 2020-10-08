@@ -98,19 +98,14 @@ public class Utils {
             //connection.setConnectTimeout(CONNECTION_TIMEOUT);
             connection.connect();
 
-            Log.d("Response code",String.valueOf(connection.getResponseCode()));
-
             if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
                 InputStream resultStream = connection.getInputStream();
-                Log.d("resultStream","" + resultStream);
                 return resultStream;
             }
 
         }catch(IOException ioe){
-            Log.d("error", "error : ", ioe);
             return null;
         }
-        Log.d("null", "default null");
         return null;
     }
 
@@ -186,7 +181,6 @@ public class Utils {
      */
     public static JSONObject getJSONFromString(String stringObject){
         JSONObject jsonObject = null;
-        Log.d("result", stringObject);
         try{
             jsonObject = new JSONObject(stringObject);
         }catch (JSONException jsonE){

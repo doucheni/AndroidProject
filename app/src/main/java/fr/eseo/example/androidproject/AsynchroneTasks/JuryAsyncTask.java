@@ -1,8 +1,8 @@
 package fr.eseo.example.androidproject.AsynchroneTasks;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -12,14 +12,16 @@ import javax.net.ssl.SSLSocketFactory;
 import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.api.Utils;
 
-public class CommAsyncTask extends AsyncTask<String, Void, JSONObject> {
+public class JuryAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     private ProjectCommActivity commActivity;
     private SSLSocketFactory sslSocketFactory;
+    private JSONArray arrayProject;
 
-    public CommAsyncTask(ProjectCommActivity commActivity, SSLSocketFactory sslSocketFactory){
+    public JuryAsyncTask(ProjectCommActivity commActivity, SSLSocketFactory sslSocketFactory, JSONArray arrayProject){
         this.commActivity = commActivity;
         this.sslSocketFactory = sslSocketFactory;
+        this.arrayProject = arrayProject;
     }
 
     @Override
@@ -41,6 +43,6 @@ public class CommAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject){
-        this.commActivity.treatmentResultProject(jsonObject);
+        this.commActivity.treatmentResultJury(this.arrayProject, jsonObject);
     }
 }
