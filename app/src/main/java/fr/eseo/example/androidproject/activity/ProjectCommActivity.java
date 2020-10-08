@@ -3,29 +3,32 @@ package fr.eseo.example.androidproject.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.AsynchroneTasks.CommAsyncTask;
-import fr.eseo.example.androidproject.AsynchroneTasks.JuryAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.Utils;
+import fr.eseo.example.androidproject.fragments.ProjectsDetailsCommFragment;
+import fr.eseo.example.androidproject.room.EseoDatabase;
+import fr.eseo.example.androidproject.room.entities.Jury;
 import fr.eseo.example.androidproject.room.entities.Project;
+import fr.eseo.example.androidproject.room.entities.User;
 
 public class ProjectCommActivity extends AppCompatActivity {
 
@@ -37,6 +40,7 @@ public class ProjectCommActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String token;
     private String username;
+    private EseoDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,19 +51,69 @@ public class ProjectCommActivity extends AppCompatActivity {
         final Context ctx = getApplicationContext();
         sslSocketFactory = Utils.configureSSLContext(ctx).getSocketFactory();
         errorRequestToast = Toast.makeText(ProjectCommActivity.this, "Error during the request", Toast.LENGTH_LONG);
-        errorResultToast = Toast.makeText(ProjectCommActivity.this, "Projects are not available", Toast.LENGTH_LONG);
+        errorResultToast = Toast.makeText(ProjectCommActivity.this, "Projects/Jury are not available", Toast.LENGTH_LONG);
         setContentView(R.layout.activity_com_projects);
         commAsyncTask = new CommAsyncTask(this, sslSocketFactory);
         this.progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
-        commAsyncTask.execute("https://172.24.5.16/pfe/webservice.php?q=LIPRJ&user="+username+"&token="+token, "GET");
+        String request = "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+this.username+"&token="+this.token;
+        commAsyncTask.execute(request, "GET");
     }
 
-    public void treatmentResultProject(JSONObject jsonObject){
+    public void treatmentResult(JSONObject jsonObject){
+        List<User> users = new ArrayList<>();
+        List<Project> projects = new ArrayList<>();
+        List<Jury> juries = new ArrayList<>();
         try{
             if(jsonObject.get("result").equals("KO")){
                 errorResultToast.show();
             }else{
-                JSONArray jsonProject = jsonObject.getJSONArray("projects");
+                JSONArray jsonJuries = jsonObject.getJSONArray("juries");
+                for(int i = 0; i < jsonJuries.length(); i++){
+                    JSONObject jsonJury = jsonJuries.getJSONObject(i);
+                    int jury_id = jsonJury.getInt("idJury");
+                    String jury_date = jsonJury.getString("date");
+                    JSONObject jsonInfo = jsonJury.getJSONObject("info");
+                    JSONArray jsonMembers = jsonInfo.getJSONArray("members");
+                    JSONArray jsonProjects = jsonInfo.getJSONArray("projects");
+
+                    Jury jury = new Jury(jury_id, jury_date);
+                    juries.add(jury);
+
+                    // Creation of user who are members of Jury
+                    for(int j = 0; j < jsonMembers.length(); j++){
+                        JSONObject jsonUser = jsonMembers.getJSONObject(j);
+                        int user_id = jsonUser.getInt("idUser");
+                        String forename = jsonUser.getString("forename");
+                        String surname = jsonUser.getString("surname");
+                        users.add(new User(user_id, forename, surname));
+                    }
+
+                    // Creation of a list of project not confidential
+                    for(int k = 0; k < jsonProjects.length(); k++){
+                        JSONObject jsonProject = jsonProjects.getJSONObject(k);
+                        int project_id = jsonProject.getInt("projectId");
+                        String project_title = jsonProject.getString("title");
+                        int project_confid = jsonProject.getInt("confid");
+                        Boolean project_poster = jsonProject.getBoolean("poster");
+                        JSONObject jsonSupervisor = jsonProject.getJSONObject("supervisor");
+                        String project_supervisor = jsonSupervisor.getString("forename") + " " + jsonSupervisor.getString("surname");
+                        if(project_confid == 0) {
+                            projects.add(new Project(project_id, project_title, "", project_poster, project_confid, project_supervisor));
+                        }
+                    }
+                }
+
+
+                for(int i = 0; i < projects.size(); i++){
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    Fragment fragment = ProjectsDetailsCommFragment.newInstance(projects.get(i));
+                    ft.add(R.id.project_container,fragment, "project-"+i);
+                    ft.commit();
+                }
+
+
+
+
                 /*
                 List<Project> listProjects = new ArrayList<>();
                 for(int i = 0; i < jsonProject.length(); i++){
@@ -76,19 +130,10 @@ public class ProjectCommActivity extends AppCompatActivity {
 
                 }
                  */
-                Log.d("test", "in treatment project, run jury request");
-                JuryAsyncTask juryAsyncTask = new JuryAsyncTask(this, sslSocketFactory, jsonProject);
-                String requestJury = "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+this.username+"&token="+this.token;
-                juryAsyncTask.execute(requestJury, "GET");
             }
         }catch (JSONException e){
             e.printStackTrace();
         }
-
-    }
-
-    public void treatmentResultJury(JSONArray jsonProject, JSONObject jsonJury){
-        Log.d("jury", jsonJury.toString());
         this.progressDialog.dismiss();
     }
 }

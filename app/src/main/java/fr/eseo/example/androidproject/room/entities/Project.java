@@ -7,10 +7,10 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity (tableName = "Projects",
-        foreignKeys = {@ForeignKey(entity = User.class, childColumns = "members", parentColumns = "userId"),
-        @ForeignKey(entity = Jury.class, childColumns = "jury", parentColumns = "idJury")})
-public class Project {
+import java.io.Serializable;
+
+@Entity (tableName = "Projects")
+public class Project implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "projectId")
     private int projectId;
@@ -24,24 +24,15 @@ public class Project {
     private int confid;
     @ColumnInfo(name="supervisor")
     private String supervisor;
-    @ColumnInfo(name="jury")
-    private int jury;
 
 
-    @ColumnInfo(name="members")
-    private int membersId;
-
-
-    public Project(int projectId, String title, String descrip, Boolean poster, int confid, String supervisor, int jury, int membersId){
+    public Project(int projectId, String title, String descrip, Boolean poster, int confid, String supervisor){
         this.projectId = projectId;
         this.title = title;
         this.descrip = descrip;
         this.poster = poster;
         this.confid = confid;
         this.supervisor = supervisor;
-        this.jury = jury;
-        this.membersId = membersId;
-
     }
 
     public int getProjectId(){ return projectId;}
@@ -85,18 +76,4 @@ public class Project {
         this.supervisor = supervisor;
     }
 
-    public int getJury() {
-        return jury;
-    }
-
-    public void setJury(int jury) {
-        this.jury = jury;
-    }
-    public int getMembersId() {
-        return membersId;
-    }
-
-    public void setMembersId(int membersId) {
-        this.membersId = membersId;
-    }
 }

@@ -41,6 +41,6 @@ public class CommAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject){
-        this.commActivity.treatmentResultProject(jsonObject);
+        this.commActivity.treatmentResult(jsonObject);
     }
 }

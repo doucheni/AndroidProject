@@ -16,14 +16,14 @@ import fr.eseo.example.androidproject.room.entities.isMember;
 
 @Dao
 public interface ProjectsDao {
-
+    /*
     @Transaction
     @Query("SELECT * FROM Projects, Users WHERE Projects.members = Users.userId")
     public LiveData<List<isMember>> findAllMembersOfTheProject();
 
     @Query("SELECT * FROM Projects WHERE Projects.jury = :idjury")
     public LiveData<Project> getProjectsOfJury(int idjury);
-
+    */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public void insert(Project project);
 
