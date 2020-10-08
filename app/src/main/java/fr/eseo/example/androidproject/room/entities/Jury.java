@@ -7,13 +7,14 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "Jury")
-public class Jury {
+public class Jury implements Serializable {
 
     @PrimaryKey
     @NonNull

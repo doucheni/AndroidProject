@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import fr.eseo.example.androidproject.room.daos.JuryDAO;
 import fr.eseo.example.androidproject.room.daos.ProjectsDao;
 import fr.eseo.example.androidproject.room.daos.UsersDao;
 import fr.eseo.example.androidproject.room.entities.Jury;
@@ -23,6 +24,8 @@ public abstract class EseoDatabase extends RoomDatabase {
     public abstract ProjectsDao ProjectsDao();
 
     public abstract UsersDao UsersDao();
+
+    public abstract JuryDAO JuryDao();
 
     public static EseoDatabase getDatabase(Context context){
         if (INSTANCE == null) {

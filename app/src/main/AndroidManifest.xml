@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.HomeActivity"></activity>
         <activity android:name=".activity.ProjectCommActivity"></activity>
+        <activity android:name=".activity.JuryActivity"></activity>
         <activity android:name=".activity.logon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"></activity>
+
     </application>
 
 </manifest>

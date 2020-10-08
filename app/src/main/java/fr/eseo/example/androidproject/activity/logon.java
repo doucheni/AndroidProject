@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -90,6 +91,14 @@ public class logon extends AppCompatActivity{
                                         intent.putExtra("TOKEN", token);
                                         intent.putExtra("USERNAME", username);
                                         startActivity(intent);
+                                        break;
+
+                                    case "Professeur" :
+                                        String usernameJury = Utils.getJSONValue(jsonValue,"username");
+                                        Intent intentJury = new Intent(ctx, JuryActivity.class);
+                                        intentJury.putExtra("TOKEN",token);
+                                        intentJury.putExtra("USERNAME",usernameJury);
+                                        startActivity(intentJury);
                                         break;
                                 }
                             }
