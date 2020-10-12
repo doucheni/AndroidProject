@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Entity(tableName = "Jury")
 public class Jury implements Serializable {
@@ -40,7 +41,6 @@ public class Jury implements Serializable {
         }
         this.date = date;
         // Get String from date : formatter.format(date)
-
     }
 
     public int getIdJury() {
@@ -59,4 +59,5 @@ public class Jury implements Serializable {
     public void setDate(@NonNull Date date) {
         this.date = date;
     }
+
 }

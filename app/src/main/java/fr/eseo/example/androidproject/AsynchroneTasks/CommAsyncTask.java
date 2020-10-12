@@ -30,10 +30,10 @@ public class CommAsyncTask extends AsyncTask<String, Void, JSONObject> {
     @Override
     protected JSONObject doInBackground(String... params){
         JSONObject jsonObject = null;
-        String urlString = params[0];
+        String urlProjects = params[0];
         String method = params[1];
 
-        InputStream inputStream = Utils.sendRequestWS(urlString, method, this.sslSocketFactory);
+        InputStream inputStream = Utils.sendRequestWS(urlProjects, method, this.sslSocketFactory);
         jsonObject = Utils.getJSONFromString(Utils.readStream(inputStream));
 
         return jsonObject;

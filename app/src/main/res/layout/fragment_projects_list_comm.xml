@@ -5,10 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_border"
     android:orientation="vertical"
-    tools:context=".fragments.ProjectsDetailsCommFragment"
+    tools:context=".fragments.ProjectsListCommFragment"
     >
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/projectTitle"
         android:layout_width="wrap_content"
@@ -19,5 +18,18 @@
         android:layout_marginLeft="10dp"
         android:textSize="20dp"
         />
+
+    <TextView
+        android:id="@+id/posterBoolean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="poster"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="end"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp">
+
+    </TextView>
 
 </LinearLayout>

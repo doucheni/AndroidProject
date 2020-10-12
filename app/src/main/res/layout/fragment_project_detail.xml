@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.ProjectDetailFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleProject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Project_title"
+        android:textSize="35dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"></TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/descriptionProject"
+            android:layout_marginTop="20dp"
+            android:text="Contenu"
+            android:textSize="20dp">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Condidentialité : "
+            android:layout_marginTop="20dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/confidentialityProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Supervisor : "
+            android:layout_marginTop="20dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/supervisorProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Name"
+            android:layout_marginTop="20dp"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/memberContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Membres : "
+            android:textSize="20dp">
+        </TextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/juryMemberContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Jury : "
+            android:textSize="20dp">
+        </TextView>
+
+    </LinearLayout>
+
+</LinearLayout>

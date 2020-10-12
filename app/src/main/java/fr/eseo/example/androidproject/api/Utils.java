@@ -1,17 +1,17 @@
 package fr.eseo.example.androidproject.api;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
@@ -198,5 +198,53 @@ public class Utils {
         }
         return jsonResult;
     }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeBase64ToBitmap(InputStream inputStream) {
+        try {
+            byte[] decodedString = IOUtils.toByteArray(inputStream);
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        } catch (IllegalArgumentException | IOException e) {
+            System.out.println("Error decoding:" + e.getMessage() );
+        }
+        return null;
+    }
+
+    public static Bitmap decodeBase64ToBitmap(String img){
+        try {
+            byte[] decodedString = img.getBytes("UTF-8");
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        } catch (IllegalArgumentException | IOException e) {
+            System.out.println("Error decoding:" + e.getMessage() );
+        }
+        return null;
+    }
+
+    public static String buildUrlForLIJUR(String username, String token){
+        return "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token;
+    }
+
 
 }

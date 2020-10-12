@@ -1,4 +1,7 @@
 package fr.eseo.example.androidproject.room.entities;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,7 +12,7 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 
 @Entity(tableName = "Users")
-public class User {
+public class User{
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="userId")
     private int userId;
@@ -59,4 +62,6 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+
 }
