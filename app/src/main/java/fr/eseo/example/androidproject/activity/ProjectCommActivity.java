@@ -75,12 +75,10 @@ public class ProjectCommActivity extends AppCompatActivity {
                     String project_title = jsonProject.getString("title");
                     String project_description = jsonProject.getString("descrip");
                     int project_confid = jsonProject.getInt("confid");
-                    String project_poster = jsonProject.getString("poster");
+                    Boolean project_poster = jsonProject.getBoolean("poster");
                     JSONObject jsonSupervisor = jsonProject.getJSONObject("supervisor");
                     String project_supervisor = jsonSupervisor.getString("forename") + " " + jsonSupervisor.getString("surname");
-                    if(project_confid == 0){
-                        projects.add(new ProjectModel(project_id, project_title, project_description, project_poster, project_confid, project_supervisor));
-                    }
+                    projects.add(new ProjectModel(project_id, project_title, project_description, project_poster, project_confid, project_supervisor));
                 }
 
                 for(int i = 0; i < projects.size(); i++){

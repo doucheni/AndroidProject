@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Project_title"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:textSize="20dp"
         />
@@ -24,12 +24,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="poster"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="end"
         android:textSize="20dp"
         android:layout_marginLeft="10dp">
-
     </TextView>
+
+    <TextView
+        android:id="@+id/confidentialityIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confidentiality"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20dp"
+        android:layout_gravity="end"
+        android:layout_marginLeft="10dp"
+        ></TextView>
 
 </LinearLayout>

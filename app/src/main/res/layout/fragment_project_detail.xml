@@ -89,37 +89,4 @@
             android:layout_marginTop="20dp"></TextView>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/memberContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Membres : "
-            android:textSize="20dp">
-        </TextView>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/juryMemberContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Jury : "
-            android:textSize="20dp">
-        </TextView>
-
-    </LinearLayout>
-
 </LinearLayout>

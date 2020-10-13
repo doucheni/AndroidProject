@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import fr.eseo.example.androidproject.R;
+import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
@@ -31,6 +33,7 @@ public class ProjectsListCommFragment extends Fragment {
     private ProjectModel project;
     private TextView textTitle;
     private TextView posterIndicator;
+    private TextView confidentialityIndicator;
     private String username;
     private String token;
     private Intent intent;
@@ -75,10 +78,19 @@ public class ProjectsListCommFragment extends Fragment {
         textTitle.setText(project.getProjectTitle());
 
         posterIndicator = v.findViewById(R.id.posterBoolean);
-        if(!project.getProjectPoster().equals("") || project.getProjectPoster() != null){
+
+        if(project.getProjectPoster()){
             posterIndicator.setText("poster available");
         }else{
             posterIndicator.setText("No poster available");
+        }
+
+        confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
+
+        if(project.getConfidentiality() != 0){
+            confidentialityIndicator.setText("Confidential project");
+        }else{
+            confidentialityIndicator.setText("Not confidential");
         }
 
         intent = new Intent(getActivity(), ProjectsDetailsCommActivity.class);
@@ -88,7 +100,12 @@ public class ProjectsListCommFragment extends Fragment {
         v.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    startActivity(intent);
+
+                    if(project.getConfidentiality() != 0){
+                        Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
+                    }else{
+                        startActivity(intent);
+                    }
                 }
             });
         return v;

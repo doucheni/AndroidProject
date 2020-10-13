@@ -19,14 +19,17 @@ import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.Utils;
+import fr.eseo.example.androidproject.fragments.PosterFragment;
 
 public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
-    private ProjectsDetailsCommActivity projectsDetailsCommActivity;
+    //private ProjectsDetailsCommActivity projectsDetailsCommActivity;
+    private PosterFragment posterFragment;
     private SSLSocketFactory sslSocketFactory;
 
-    public PosterAsyncTask(ProjectsDetailsCommActivity commActivity, SSLSocketFactory sslSocketFactory){
-        this.projectsDetailsCommActivity = commActivity;
+    public PosterAsyncTask(PosterFragment posterFragment, SSLSocketFactory sslSocketFactory){
+        //this.projectsDetailsCommActivity = commActivity;
+        this.posterFragment = posterFragment;
         this.sslSocketFactory = sslSocketFactory;
     }
 
@@ -35,12 +38,14 @@ public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected Bitmap doInBackground(String... params){
         Bitmap bitmap = null;
 
-        InputStream inputStream = Utils.sendRequestWS(params[0], params[1], this.sslSocketFactory);
+        System.out.println(params[0]);
+
+        String result = Utils.getStringFromRequestWS(params[0], params[1], this.sslSocketFactory);
+
         /*
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = Utils.calculateInSampleSize(options,50, 75);
@@ -56,15 +61,17 @@ public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-         */
+        */
 
-        bitmap = Utils.decodeBase64ToBitmap(inputStream);
+        bitmap = Utils.decodeBase64ToBitmap(result);
+
         return bitmap;
     }
 
     @Override
     protected void onPostExecute(Bitmap bitmap){
-        this.projectsDetailsCommActivity.downloadImage(bitmap);
+        //this.projectsDetailsCommActivity.downloadImage(bitmap);
+        this.posterFragment.treatmentResult(bitmap);
     }
 
 

@@ -12,6 +12,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import fr.eseo.example.androidproject.AsynchroneTasks.PosterAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.Utils;
+import fr.eseo.example.androidproject.fragments.PosterFragment;
 import fr.eseo.example.androidproject.fragments.ProjectDetailFragment;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.room.entities.Project;
@@ -40,12 +43,14 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
 
     private SSLSocketFactory sslSocketFactory;
     private ProgressDialog progressDialog;
-    private LinearLayout posterContainer;
 
     private String token;
     private String username;
     private ProjectModel project;
-    private JuryModel juryModel;
+
+    private Button buttonPoster;
+    private Button buttonDetails;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +61,38 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
         token = intent.getStringExtra(ARG_TOKEN);
         project = (ProjectModel) intent.getSerializableExtra(ARG_PROJECT);
         username = intent.getStringExtra(ARG_USERNAME);
-        posterContainer = findViewById(R.id.posterContainer);
         sslSocketFactory = Utils.configureSSLContext(this.getApplicationContext()).getSocketFactory();
 
+        buttonPoster = findViewById(R.id.button_poster);
+        buttonDetails = findViewById(R.id.button_details);
+
+        buttonPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Fragment fragment = PosterFragment.newInstance(project, username, token);
+                ft.add(R.id.poster_container, fragment, "poster");
+                ft.commit();
+            }
+        });
+
+        buttonDetails.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.d("detail", project.getProjectDescription());
+            }
+        });
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = ProjectDetailFragment.newInstance(project);
+        ft.add(R.id.project_detail_container,fragment, "project");
+        ft.commit();
+
+        /*
         juryProjectCommAsyncTask = new JuryProjectCommAsyncTask(project, sslSocketFactory, this);
         this.progressDialog = ProgressDialog.show(ProjectsDetailsCommActivity.this,"Loading", "Please wait ...", true);
         juryProjectCommAsyncTask.execute(Utils.buildUrlForLIJUR(username, token),"GET");
-
+        */
     }
 
     public void downloadImage(Bitmap bitmap){
@@ -82,13 +112,12 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
 
         ImageView posterProject = new ImageView(ProjectsDetailsCommActivity.this);
         posterProject.setImageBitmap(resized);
-        posterContainer.addView(posterProject);
+        //posterContainer.addView(posterProject);
         this.progressDialog.dismiss();
     }
-
+    /*
     public void updateActivityViews(JuryModel juryModel){
         Bitmap posterBM = null;
-        Log.d("poster", project.getProjectPoster());
         if(!this.project.getProjectPoster().equals("")){
             if(this.project.getProjectPoster() != null){
                 try {
@@ -108,15 +137,16 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                 Bitmap resized = Bitmap.createScaledBitmap(posterBM, newWidth, newHeight, true);
                 ImageView posterProject = new ImageView(ProjectsDetailsCommActivity.this);
                 posterProject.setImageBitmap(resized);
-                posterContainer.addView(posterProject);
+                //posterContainer.addView(posterProject);
             }
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = ProjectDetailFragment.newInstance(project, juryModel);
+        Fragment fragment = ProjectDetailFragment.newInstance(project);
         ft.add(R.id.project_detail_container,fragment, "project");
         ft.commit();
         this.progressDialog.dismiss();
     }
+     */
 }
 

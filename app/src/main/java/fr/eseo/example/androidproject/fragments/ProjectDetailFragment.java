@@ -28,7 +28,6 @@ public class ProjectDetailFragment extends Fragment {
     private static final String ARG_JURY = "jury";
 
     private ProjectModel project;
-    private JuryModel juryModel;
 
     private  TextView titleProject;
     private TextView descriptionProject;
@@ -46,14 +45,12 @@ public class ProjectDetailFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param project Parameter 1.
-     * @param project Parameter 2.
      * @return A new instance of fragment ProjectDetailFragment.
      */
-    public static ProjectDetailFragment newInstance(ProjectModel project, JuryModel juryModel) {
+    public static ProjectDetailFragment newInstance(ProjectModel project) {
         ProjectDetailFragment fragment = new ProjectDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PROJECT, project);
-        args.putSerializable(ARG_JURY, juryModel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +60,6 @@ public class ProjectDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             project = (ProjectModel) getArguments().getSerializable(ARG_PROJECT);
-            juryModel = (JuryModel) getArguments().getSerializable(ARG_JURY);
         }
     }
 
@@ -76,8 +72,6 @@ public class ProjectDetailFragment extends Fragment {
         descriptionProject = view.findViewById(R.id.descriptionProject);
         confidProject = view.findViewById(R.id.confidentialityProject);
         supervisorProject = view.findViewById(R.id.supervisorProject);
-        memberContainer = view.findViewById(R.id.memberContainer);
-        juryContainer = view.findViewById(R.id.juryMemberContainer);
 
         titleProject.setText(project.getProjectTitle());
 
@@ -90,12 +84,6 @@ public class ProjectDetailFragment extends Fragment {
         }
 
         supervisorProject.setText(project.getSupervisor());
-
-        for(UserModel user : juryModel.getMembers()){
-            TextView juryTextView = new TextView(view.getContext());
-            juryTextView.setText(user.getUserForename() + " " + user.getUserSurname());
-            juryContainer.addView(juryTextView);
-        }
 
         return view;
     }

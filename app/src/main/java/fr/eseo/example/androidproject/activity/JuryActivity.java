@@ -26,7 +26,6 @@ import fr.eseo.example.androidproject.AsynchroneTasks.myJuryAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.JuryActivityFragment;
-import fr.eseo.example.androidproject.fragments.ProjectsDetailsCommFragment;
 import fr.eseo.example.androidproject.room.entities.Jury;
 
 public class JuryActivity extends AppCompatActivity {

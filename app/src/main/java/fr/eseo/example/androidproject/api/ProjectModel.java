@@ -9,11 +9,11 @@ public class ProjectModel implements Serializable {
     private int projectId;
     private String projectTitle;
     private String projectDescription;
-    private String projectPoster;
+    private Boolean projectPoster;
     private int confidentiality;
     private String supervisor;
 
-    public ProjectModel(int projectId, String projectTitle, String projectDescription, String projectPoster, int confidentiality, String supervisor) {
+    public ProjectModel(int projectId, String projectTitle, String projectDescription, Boolean projectPoster, int confidentiality, String supervisor) {
         this.projectId = projectId;
         this.projectTitle = projectTitle;
         this.projectDescription = projectDescription;
@@ -46,11 +46,11 @@ public class ProjectModel implements Serializable {
         this.projectDescription = projectDescription;
     }
 
-    public String getProjectPoster() {
+    public Boolean getProjectPoster() {
         return projectPoster;
     }
 
-    public void setProjectPoster(String projectPoster) {
+    public void setProjectPoster(Boolean projectPoster) {
         this.projectPoster = projectPoster;
     }
 

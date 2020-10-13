@@ -79,7 +79,7 @@ public class JuryProjectCommAsyncTask extends AsyncTask<String, Void, JuryModel>
 
     @Override
     protected void onPostExecute(JuryModel juryModel){
-        this.projectsDetailsCommActivity.updateActivityViews(juryModel);
+        //this.projectsDetailsCommActivity.updateActivityViews(juryModel);
     }
 
 

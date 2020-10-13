@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
@@ -23,6 +24,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -105,6 +107,29 @@ public class Utils {
 
         }catch(IOException ioe){
             return null;
+        }
+        return null;
+    }
+
+    public static String getStringFromRequestWS(String url, String method, SSLSocketFactory sslSocketFactory){
+        try{
+            URL urlConnection = new URL(url);
+            HttpsURLConnection connection = (HttpsURLConnection)urlConnection.openConnection();
+            connection.setSSLSocketFactory(sslSocketFactory);
+            connection.setRequestMethod(method);
+            connection.connect();
+            Scanner scanner = new Scanner(connection.getInputStream());
+            scanner.useDelimiter("\\A");
+            boolean hasInput = scanner.hasNext();
+            String scannerText = scanner.next();
+            if(hasInput){
+                return scannerText;
+            }
+            connection.disconnect();
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -233,17 +258,23 @@ public class Utils {
     }
 
     public static Bitmap decodeBase64ToBitmap(String img){
+
         try {
-            byte[] decodedString = img.getBytes("UTF-8");
+            byte[] decodedString = Base64.decode(img, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        } catch (IllegalArgumentException | IOException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Error decoding:" + e.getMessage() );
         }
+
         return null;
     }
 
     public static String buildUrlForLIJUR(String username, String token){
         return "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token;
+    }
+
+    public static String buildURLForPOSTR(String username, String token, int project_id, String format){
+        return "https://172.24.5.16/pfe/webservice.php?q=POSTR&user="+username+"&proj="+project_id+"&style="+format+"&token="+token;
     }
 
 
