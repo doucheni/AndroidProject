@@ -3,4 +3,7 @@
     <string name="project_title">Project Title</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="jury_id">Jury_id</string>
+    <string name="jury_date">Jury_date</string>
+    <string name="jury_name">jury_name</string>
 </resources>

@@ -4,14 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,18 +31,20 @@ public class JuryActivity extends AppCompatActivity {
     private Toast errorResultToast;
     private ProgressDialog progressDialog;
     private myJuryAsyncTask myJuryAsyncTask;
-    public static final String JURY_ID = "juryId";
-    private String token;
-    private String username;
-    private JuryActivityFragment juryActivityFragment;
+    public static final String JURY_ID = "jury_id";
+    public static final String USERNAME ="username";
+    public static final String TOKEN = "token";
+    public  String username;
+    public  String token;
+    private int jury_id;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intentJury = getIntent();
-        final String token = intentJury.getStringExtra("TOKEN");
-        final String username = intentJury.getStringExtra("USERNAME");
+        token = intentJury.getStringExtra("TOKEN");
+        username = intentJury.getStringExtra("USERNAME");
         final Context ctx = getApplicationContext();
         sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
         errorRequestToast = Toast.makeText(JuryActivity.this, "Error during the request", Toast.LENGTH_LONG);
@@ -67,23 +66,24 @@ public class JuryActivity extends AppCompatActivity {
                 JSONArray jsonJuries = jsonObject.getJSONArray("juries");
                 for(int i = 0; i < jsonJuries.length(); i++) {
                     JSONObject jsonJury = jsonJuries.getJSONObject(i);
-                    int jury_id = jsonJury.getInt("idJury");
+                     jury_id = jsonJury.getInt("idJury");
                     String jury_date = jsonJury.getString("date");
                     JSONObject jsonInfo = jsonJury.getJSONObject("info");
                     JSONArray jsonMembers = jsonInfo.getJSONArray("members");
                     JSONArray jsonProjects = jsonInfo.getJSONArray("projects");
-
                     Jury jury = new Jury(jury_id, jury_date);
                     juries.add(jury);
-                    Log.d(String.valueOf(jury), "treatmentResultMyJury: jury ");
+
                 }
 
             }
             for(int i = 0; i < juries.size(); i++){
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                Fragment fragment = JuryActivityFragment.newInstance(juries.get(i));
+                Fragment fragment = JuryActivityFragment.newInstance(juries.get(i),this.username,this.token);
                 ft.add(R.id.jury_container,fragment, "Jury-"+i);
                 ft.commit();
+
+
             }
 
 
@@ -93,6 +93,8 @@ public class JuryActivity extends AppCompatActivity {
         this.progressDialog.dismiss();
 
     }
+
+
 
 
 

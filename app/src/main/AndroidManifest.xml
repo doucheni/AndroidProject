@@ -15,6 +15,7 @@
         <activity android:name=".activity.HomeActivity"></activity>
         <activity android:name=".activity.ProjectCommActivity"></activity>
         <activity android:name=".activity.JuryActivity"></activity>
+        <activity android:name=".activity.JuryDetailsActivity"></activity>
         <activity android:name=".activity.ProjectsDetailsCommActivity"></activity>
         <activity android:name=".activity.logon">
             <intent-filter>
@@ -22,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity"></activity>
+
     </application>
 
 </manifest>

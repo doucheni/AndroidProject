@@ -5,31 +5,19 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_border"
     android:orientation="vertical"
-    tools:context=".fragments.JuryActivityFragment"
+    tools:context=".fragments.JuryDetailsFragment"
     >
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/summary_jury_id"
+        android:id="@+id/projectTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/jury_id"
+        android:text="Project_title"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="10dp"
-        android:textSize="60dp"
-        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp"
         />
-
-
-<!--    <TextView
-        android:id="@+id/summary_jury_names"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/jury_name"
-        android:layout_gravity="start"
-        android:textSize="30dp"
-         />-->
-
-
 
 </LinearLayout>

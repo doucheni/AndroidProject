@@ -1,5 +1,6 @@
 package fr.eseo.example.androidproject.room.entities;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class Jury implements Serializable {
     @NonNull
     @ColumnInfo(name = "date")
     private Date date;
+
 
     public Jury(){
 
