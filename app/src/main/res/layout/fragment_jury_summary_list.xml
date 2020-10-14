@@ -8,6 +8,18 @@
     tools:context=".fragments.JuryActivityFragment"
     >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Jury n°"
+        android:layout_marginTop="20dp">
+    </TextView>
+
     <TextView
         android:id="@+id/summary_jury_id"
         android:layout_width="wrap_content"
@@ -18,7 +30,7 @@
         android:layout_marginStart="10dp"
         android:textSize="20dp"
         />
-
+    </LinearLayout>
 
 <!--    <TextView
         android:id="@+id/summary_jury_names"
