@@ -84,8 +84,9 @@ public class JuryDetailsActivity extends AppCompatActivity {
                         String title = jsonProject.getString("title");
                         int confid = jsonProject.getInt("confid");
                         boolean poster = jsonProject.getBoolean("poster");
+                        String supervisor = jsonProject.getString("supervisor");
 
-                        ProjectModel project = new ProjectModel(projectId,title,"",poster,confid,"");
+                        ProjectModel project = new ProjectModel(projectId,title,"",poster,confid,supervisor);
                         projects.add(project);
 
                     }
