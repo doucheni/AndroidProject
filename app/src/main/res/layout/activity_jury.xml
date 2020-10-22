@@ -7,9 +7,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/jury_container">
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/jury_container"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="wrap_content"
+            android:id="@+id/button_projects"
+            android:layout_height="wrap_content"
+            android:text="see all projects"
+            android:layout_gravity="center"
+            android:onClick="seeProjects"
+
+            ></Button>
+    </LinearLayout>
 
     </LinearLayout>
+
 
 </ScrollView>

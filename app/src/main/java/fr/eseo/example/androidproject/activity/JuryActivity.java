@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -21,9 +23,11 @@ import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.AsynchroneTasks.myJuryAsyncTask;
 import fr.eseo.example.androidproject.R;
+import fr.eseo.example.androidproject.api.JuryModel;
+import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.JuryActivityFragment;
-import fr.eseo.example.androidproject.room.entities.Jury;
+
 
 public class JuryActivity extends AppCompatActivity {
     private SSLSocketFactory sslSocket;
@@ -37,6 +41,8 @@ public class JuryActivity extends AppCompatActivity {
     public  String username;
     public  String token;
     private int jury_id;
+    private Intent intent;
+
 
 
     @Override
@@ -57,7 +63,8 @@ public class JuryActivity extends AppCompatActivity {
     }
 
     public void treatmentResultMyJury(JSONObject jsonObject) {
-        List<Jury> juries = new ArrayList<>();
+        List<JuryModel> juries = new ArrayList<>();
+        ArrayList<UserModel> listMembers = new ArrayList<>();
 
         try {
             if (jsonObject.get("result").equals("KO")) {
@@ -70,9 +77,18 @@ public class JuryActivity extends AppCompatActivity {
                     String jury_date = jsonJury.getString("date");
                     JSONObject jsonInfo = jsonJury.getJSONObject("info");
                     JSONArray jsonMembers = jsonInfo.getJSONArray("members");
-                    JSONArray jsonProjects = jsonInfo.getJSONArray("projects");
-                    Jury jury = new Jury(jury_id, jury_date);
+                    for(int m=0;m<jsonMembers.length();m++){
+                        JSONObject jsonMember = jsonMembers.getJSONObject(m);
+                        int member_id = jsonMember.getInt("idUser");
+                        String member_forename = jsonMember.getString("forename");
+                        String member_surname = jsonMember.getString("surname");
+                        UserModel member = new UserModel(member_id,member_forename,member_surname);
+                        listMembers.add(member);
+                    }
+
+                    JuryModel jury = new JuryModel(jury_id, jury_date,listMembers);
                     juries.add(jury);
+
 
                 }
 
@@ -91,6 +107,20 @@ public class JuryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         this.progressDialog.dismiss();
+
+    }
+
+    public void seeProjects(View view) {
+        Button button = view.findViewById(R.id.button_projects);
+        intent = new Intent(this.getApplicationContext(), ProjectCommActivity.class);
+        intent.putExtra("TOKEN", token);
+        intent.putExtra("USERNAME", username);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                startActivity(intent);
+            }
+        });
 
     }
 

@@ -90,6 +90,7 @@ public class logon extends AppCompatActivity{
                                         Intent intent = new Intent(ctx, ProjectCommActivity.class);
                                         intent.putExtra("TOKEN", token);
                                         intent.putExtra("USERNAME", username);
+
                                         startActivity(intent);
                                         break;
 

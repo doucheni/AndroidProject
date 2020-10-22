@@ -8,9 +8,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.JuryDetailsActivity;
-import fr.eseo.example.androidproject.room.entities.Jury;
+import fr.eseo.example.androidproject.api.JuryModel;
+import fr.eseo.example.androidproject.api.User;
+import fr.eseo.example.androidproject.api.UserModel;
 
 
 public class JuryActivityFragment extends Fragment {
@@ -19,8 +27,9 @@ public class JuryActivityFragment extends Fragment {
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
-    private Jury jury;
+    private JuryModel jury;
     private TextView textTitle;
+    private TextView juryNames;
 
     private String token;
     private Intent intent;
@@ -31,7 +40,7 @@ public class JuryActivityFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static JuryActivityFragment newInstance(Jury jury, String username, String token) {
+    public static JuryActivityFragment newInstance(JuryModel jury, String username, String token) {
         JuryActivityFragment fragment = new JuryActivityFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_JURY, jury);
@@ -45,7 +54,7 @@ public class JuryActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            jury = (Jury) getArguments().getSerializable(ARG_JURY);
+            jury = (JuryModel) getArguments().getSerializable(ARG_JURY);
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
         }
@@ -57,12 +66,26 @@ public class JuryActivityFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_jury_summary_list, container, false);
 
         textTitle = v.findViewById(R.id.summary_jury_id);
-        textTitle.setText(String.valueOf(jury.getIdJury()));
-        //members = v.findViewById(R.id.summary_jury_names);
+        textTitle.setText(String.valueOf(jury.getJuryId()));
+        juryNames = v.findViewById(R.id.summary_jury_name);
+        List<UserModel> members = jury.getMembers();
+        StringBuilder builder = new StringBuilder();
+
+        for (int i=0;i<members.size();i++){
+            builder.append(members.get(i).getUserForename());
+            builder.append(" ");
+            builder.append(members.get(i).getUserSurname());
+            builder.append(", ");
+            //juryNames.setText(members.get(i).getUserSurname());
+            System.out.println("MEMBRES"+members.get(i).getUserSurname());
+        }
+        juryNames.setText(builder.toString());
+
+
 
 
         intent = new Intent(getActivity(), JuryDetailsActivity.class);
-        intent.putExtra("ARG_JURY", jury.getIdJury());
+        intent.putExtra(ARG_JURY, jury);
         intent.putExtra(ARG_USERNAME,username);
         intent.putExtra(ARG_TOKEN, token);
         v.setOnClickListener(new View.OnClickListener(){
@@ -74,6 +97,9 @@ public class JuryActivityFragment extends Fragment {
 
         return v;
     }
+
+
+
 
 
 
