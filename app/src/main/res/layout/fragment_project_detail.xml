@@ -36,7 +36,8 @@
             android:id="@+id/descriptionProject"
             android:layout_marginTop="20dp"
             android:text="Contenu"
-            android:textSize="20dp">
+            android:textSize="20dp"
+            android:justificationMode="inter_word">
 
         </TextView>
 

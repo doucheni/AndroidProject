@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.Display;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import fr.eseo.example.androidproject.AsynchroneTasks.PosterAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.Utils;
 
 /**
@@ -23,7 +25,7 @@ import fr.eseo.example.androidproject.api.Utils;
  * Use the {@link PosterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PosterFragment extends Fragment {
+public class PosterFragment extends DialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

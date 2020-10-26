@@ -8,7 +8,7 @@
     tools:context=".fragments.ProjectsListCommFragment"
     >
 
-    <TextView
+    <CheckBox
         android:id="@+id/projectTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

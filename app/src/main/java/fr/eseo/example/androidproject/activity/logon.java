@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.R;
+import fr.eseo.example.androidproject.api.PseudoJuryModel;
 import fr.eseo.example.androidproject.api.User;
 import fr.eseo.example.androidproject.api.Utils;
 
@@ -43,6 +45,7 @@ public class logon extends AppCompatActivity{
     private SSLSocketFactory sslSocket;
 
     private Toast errorConnectionToast;
+    private Button linkVisitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class logon extends AppCompatActivity{
         ctx = this.getApplicationContext();
         username.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
+        linkVisitor = findViewById(R.id.link_visitor);
 
         sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
 
@@ -111,6 +115,22 @@ public class logon extends AppCompatActivity{
                 }
             }
         });
+
+        linkVisitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                PseudoJuryModel pseudoJuryModel = (PseudoJuryModel)intent.getSerializableExtra("pseudojury");
+                if(pseudoJuryModel == null){
+                    Toast.makeText(logon.this, "Demandez l'intervention d'un membre du service de communication", Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intentVisitor = new Intent(ctx, VisitorActivity.class);
+                    intentVisitor.putExtra("pseudojury", pseudoJuryModel);
+                    startActivity(intentVisitor);
+                }
+            }
+        });
+
     }
 
     TextWatcher loginTextWatcher = new TextWatcher() {

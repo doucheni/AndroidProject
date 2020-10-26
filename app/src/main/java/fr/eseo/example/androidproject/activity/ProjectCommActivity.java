@@ -5,9 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -22,10 +28,15 @@ import java.util.List;
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.AsynchroneTasks.CommAsyncTask;
+import fr.eseo.example.androidproject.AsynchroneTasks.RandomProjectsPJAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.PseudoJuryModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
+import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.ProjectsListCommFragment;
+import fr.eseo.example.androidproject.fragments.PseudoJuryProjectsComm;
 import fr.eseo.example.androidproject.room.EseoDatabase;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.room.entities.Project;
@@ -44,6 +55,13 @@ public class ProjectCommActivity extends AppCompatActivity {
     private String username;
     private EseoDatabase database;
 
+    private List<ProjectModel> projectsSelected = new ArrayList<>();
+    private List<PseudoJuryModel> pseudoJuryModelList = new ArrayList<>();
+
+    private Button btnNewPJ;
+    private Button btnAutoPJ;
+    private LinearLayout pseudoJuryContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -59,11 +77,48 @@ public class ProjectCommActivity extends AppCompatActivity {
         this.progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
         String requestProject = "https://172.24.5.16/pfe/webservice.php?q=LIPRJ&user="+this.username+"&token="+this.token;
         commAsyncTask.execute(requestProject, "GET");
+
+        pseudoJuryContainer = findViewById(R.id.pseudojury_container_main);
+        btnNewPJ = findViewById(R.id.btn_newPJ);
+        btnAutoPJ = findViewById(R.id.btn_autoPJ);
+
+        btnNewPJ.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(projectsSelected.size() > 0){
+                    PseudoJuryModel pseudoJuryModel = new PseudoJuryModel(projectsSelected);
+
+                    if(pseudoJuryModelList.size() == 0){
+                        pseudoJuryContainer.removeViewAt(1);
+                    }
+
+                    pseudoJuryModelList.add(pseudoJuryModel);
+
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel);
+                    ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
+                    ft.commit();
+                }else{
+                    Toast.makeText(ProjectCommActivity.this, "Vous devez selectionner au moins un projet", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btnAutoPJ.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                RandomProjectsPJAsyncTask randomProjectsPJAsyncTask = new RandomProjectsPJAsyncTask(ProjectCommActivity.this, sslSocketFactory);
+                String urlRequest = "https://172.24.5.16/pfe/webservice.php?q=PORTE&user=" + username + "&token=" + token;
+                progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
+                randomProjectsPJAsyncTask.execute(urlRequest, "GET");
+            }
+        });
+
     }
 
     public void treatmentResult(JSONObject jsonObject){
         List<ProjectModel> projects = new ArrayList<>();
-        HashMap<Integer, JuryModel> membersJury = new HashMap<>();
+        HashMap<Integer, StudentsGroup> groups = new HashMap<>();
         try{
             if(jsonObject.get("result").equals("KO")){
                 errorResultToast.show();
@@ -79,11 +134,23 @@ public class ProjectCommActivity extends AppCompatActivity {
                     JSONObject jsonSupervisor = jsonProject.getJSONObject("supervisor");
                     String project_supervisor = jsonSupervisor.getString("forename") + " " + jsonSupervisor.getString("surname");
                     projects.add(new ProjectModel(project_id, project_title, project_description, project_poster, project_confid, project_supervisor));
+
+                    JSONArray jsonStudents = jsonProject.getJSONArray("students");
+                    List<UserModel> studentsMember = new ArrayList<>();
+                    for(int j = 0; j < jsonStudents.length(); j++){
+                        JSONObject jsonStudent = jsonStudents.getJSONObject(j);
+                        int userId = jsonStudent.getInt("userId");
+                        String user_forename = jsonStudent.getString("forename");
+                        String user_surname = jsonStudent.getString("surname");
+                        studentsMember.add(new UserModel(userId, user_forename, user_surname));
+                    }
+                    StudentsGroup studentsGroup = new StudentsGroup(project_id, studentsMember);
+                    groups.put(project_id, studentsGroup);
                 }
 
                 for(int i = 0; i < projects.size(); i++){
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    Fragment fragment = ProjectsListCommFragment.newInstance(projects.get(i), this.username, this.token);
+                    Fragment fragment = ProjectsListCommFragment.newInstance(projects.get(i), groups.get(projects.get(i).getProjectId()), this.username, this.token);
                     ft.add(R.id.project_container,fragment, "project-"+i);
                     ft.commit();
                 }
@@ -92,6 +159,73 @@ public class ProjectCommActivity extends AppCompatActivity {
         }catch (JSONException e){
             e.printStackTrace();
         }
+        this.progressDialog.dismiss();
+    }
+
+    /**
+     * Add a ProjectModel to the list of ProjectModel that the user has selected
+     * @param project the project to add
+     */
+    public void addProjectSelected(ProjectModel project){
+        if(this.projectsSelected.size() < 5){
+            this.projectsSelected.add(project);
+        }else{
+            Toast.makeText(ProjectCommActivity.this, "You can't select more than 5 projects", Toast.LENGTH_LONG ).show();
+        }
+    }
+
+    /**
+     * Remove a ProjectModel from the list of ProjectModel that the user has selected
+     * @param project the project to remove
+     */
+    public void removeProjectSelected(ProjectModel project){
+        if(this.projectsSelected.contains(project)){
+            this.projectsSelected.remove(project);
+        }
+    }
+
+    /**
+     * Function wich obtain the result of the PORTE request (API)
+     * Create a new pseudojury model with random project
+     * @param jsonObject the result of the request
+     */
+    public void treatmentResultPORTE(JSONObject jsonObject){
+        List<ProjectModel> projectsRandom = new ArrayList<>();
+        try{
+            if(jsonObject.getString("result").equals("KO")){
+                Toast.makeText(ProjectCommActivity.this, "Problème d'identification", Toast.LENGTH_LONG).show();
+            }else{
+                JSONArray jsonProjects = jsonObject.getJSONArray("projects");
+                for(int i = 0; i < jsonProjects.length(); i++){
+                    JSONObject jsonProject = jsonProjects.getJSONObject(i);
+                    int project_id = jsonProject.getInt("idProject");
+                    String project_title = jsonProject.getString("title");
+                    String project_description = jsonProject.getString("description");
+                    String poster = jsonProject.getString("poster");
+                    ProjectModel projectModel = new ProjectModel();
+                    projectModel.setProjectId(project_id);
+                    projectModel.setProjectTitle(project_title);
+                    projectModel.setProjectDescription(project_description);
+                    projectModel.setProjectPoster(true);
+                    projectsRandom.add(projectModel);
+                }
+            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        if(pseudoJuryModelList.size() == 0){
+            pseudoJuryContainer.removeViewAt(1);
+        }
+
+        PseudoJuryModel pseudoJuryModel = new PseudoJuryModel(projectsRandom);
+        pseudoJuryModelList.add(pseudoJuryModel);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel);
+        ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
+        ft.commit();
+
         this.progressDialog.dismiss();
     }
 }

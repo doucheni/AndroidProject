@@ -270,12 +270,14 @@ public class Utils {
     }
 
     public static String buildUrlForLIJUR(String username, String token){
+        System.out.println("https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token);
         return "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token;
     }
 
     public static String buildURLForPOSTR(String username, String token, int project_id, String format){
         return "https://172.24.5.16/pfe/webservice.php?q=POSTR&user="+username+"&proj="+project_id+"&style="+format+"&token="+token;
     }
+
 
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.room.entities.Project;
 
 /**
@@ -27,13 +29,17 @@ import fr.eseo.example.androidproject.room.entities.Project;
 public class ProjectsListCommFragment extends Fragment {
 
     private static final String ARG_PROJECT = "project";
+    private static final String ARG_STUDENTS = "students";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
+    private ProjectCommActivity mainActivity;
     private ProjectModel project;
+    private StudentsGroup studentsGroup;
     private TextView textTitle;
     private TextView posterIndicator;
     private TextView confidentialityIndicator;
+    private CheckBox checkBox;
     private String username;
     private String token;
     private Intent intent;
@@ -49,10 +55,11 @@ public class ProjectsListCommFragment extends Fragment {
      * @param project Parameter 1.
      * @return A new instance of fragment ProjectsDetailsCommFragment.
      */
-    public static ProjectsListCommFragment newInstance(ProjectModel project, String username, String token) {
+    public static ProjectsListCommFragment newInstance(ProjectModel project, StudentsGroup studentsGroup, String username, String token) {
         ProjectsListCommFragment fragment = new ProjectsListCommFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PROJECT, project);
+        args.putSerializable(ARG_STUDENTS, studentsGroup);
         args.putString(ARG_USERNAME, username);
         args.putString(ARG_TOKEN, token);
         fragment.setArguments(args);
@@ -66,6 +73,7 @@ public class ProjectsListCommFragment extends Fragment {
             project = (ProjectModel) getArguments().getSerializable(ARG_PROJECT);
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
+            studentsGroup = (StudentsGroup)getArguments().getSerializable(ARG_STUDENTS);
         }
     }
 
@@ -73,6 +81,8 @@ public class ProjectsListCommFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_projects_list_comm, container, false);
+
+        mainActivity = (ProjectCommActivity)getActivity();
 
         textTitle = v.findViewById(R.id.projectTitle);
         textTitle.setText(project.getProjectTitle());
@@ -95,12 +105,12 @@ public class ProjectsListCommFragment extends Fragment {
 
         intent = new Intent(getActivity(), ProjectsDetailsCommActivity.class);
         intent.putExtra(ARG_PROJECT, project);
+        intent.putExtra(ARG_STUDENTS, studentsGroup);
         intent.putExtra(ARG_USERNAME,username);
         intent.putExtra(ARG_TOKEN, token);
         v.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-
                     if(project.getConfidentiality() != 0){
                         Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
                     }else{
@@ -108,6 +118,20 @@ public class ProjectsListCommFragment extends Fragment {
                     }
                 }
             });
+
+        checkBox = v.findViewById(R.id.projectTitle);
+        checkBox.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(checkBox.isChecked()){
+                    mainActivity.addProjectSelected(project);
+                }else{
+                    mainActivity.removeProjectSelected(project);
+                }
+            }
+        });
+
+
         return v;
     }
 }

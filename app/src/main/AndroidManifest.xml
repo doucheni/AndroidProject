@@ -12,19 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.HomeActivity"></activity>
-        <activity android:name=".activity.ProjectCommActivity"></activity>
-        <activity android:name=".activity.JuryActivity"></activity>
-        <activity android:name=".activity.JuryDetailsActivity"></activity>
-        <activity android:name=".activity.ProjectsDetailsCommActivity"></activity>
+        <activity android:name=".activity.VisitorActivity"></activity>
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.ProjectCommActivity" />
+        <activity android:name=".activity.JuryActivity" />
+        <activity android:name=".activity.JuryDetailsActivity" />
+        <activity android:name=".activity.ProjectsDetailsCommActivity" />
         <activity android:name=".activity.logon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"></activity>
-
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package fr.eseo.example.androidproject.AsynchroneTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,9 @@ public class JuryProjectCommAsyncTask extends AsyncTask<String, Void, JuryModel>
         InputStream inputStream = Utils.sendRequestWS(urlRequest, method, this.sslSocketFactory);
         JSONObject resultFromStream = Utils.getJSONFromString(Utils.readStream(inputStream));
 
+        Log.d("result", Utils.readStream(inputStream));
+
+
         try {
             JSONArray jsonJuries = resultFromStream.getJSONArray("juries");
             for(int i = 0; i< jsonJuries.length(); i++){
@@ -80,6 +84,7 @@ public class JuryProjectCommAsyncTask extends AsyncTask<String, Void, JuryModel>
     @Override
     protected void onPostExecute(JuryModel juryModel){
         //this.projectsDetailsCommActivity.updateActivityViews(juryModel);
+        this.projectsDetailsCommActivity.presentJury(juryModel);
     }
 
 

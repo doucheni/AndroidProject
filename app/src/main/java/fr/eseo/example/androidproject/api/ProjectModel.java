@@ -22,6 +22,10 @@ public class ProjectModel implements Serializable {
         this.supervisor = supervisor;
     }
 
+    public ProjectModel(){
+
+    }
+
     public int getProjectId() {
         return projectId;
     }
