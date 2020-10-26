@@ -76,8 +76,6 @@ public class JuryActivityFragment extends Fragment {
             builder.append(" ");
             builder.append(members.get(i).getUserSurname());
             builder.append(", ");
-            //juryNames.setText(members.get(i).getUserSurname());
-            System.out.println("MEMBRES"+members.get(i).getUserSurname());
         }
         juryNames.setText(builder.toString());
 

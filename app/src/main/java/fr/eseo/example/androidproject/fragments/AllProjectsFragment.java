@@ -1,55 +1,70 @@
 package fr.eseo.example.androidproject.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
+import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
+import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.room.entities.Project;
 
-public class JuryDetailsFragment  extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AllProjectsFragment #newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class AllProjectsFragment extends Fragment {
 
-    private static final String ARG_JURY = "project";
     private static final String ARG_PROJECT = "project";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
+
+    private ProjectModel project;
     private TextView textTitle;
     private TextView posterIndicator;
     private TextView confidentialityIndicator;
-    private ProjectModel project;
-    private Intent intent;
     private String username;
     private String token;
-    Context ctx;
+    private Intent intent;
 
-    private int idJury;
-
-    public JuryDetailsFragment() {
+    public AllProjectsFragment() {
         // Required empty public constructor
     }
-    public static JuryDetailsFragment newInstance(ProjectModel project,String username, String token) {
-        JuryDetailsFragment fragment = new JuryDetailsFragment();
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param project Parameter 1.
+     * @return A new instance of fragment ProjectsDetailsCommFragment.
+     */
+    public static AllProjectsFragment newInstance(ProjectModel project, String username, String token) {
+        AllProjectsFragment fragment = new AllProjectsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_JURY, project);
+        args.putSerializable(ARG_PROJECT, project);
         args.putString(ARG_USERNAME, username);
         args.putString(ARG_TOKEN, token);
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            project = (ProjectModel) getArguments().getSerializable(ARG_JURY);
+            project = (ProjectModel) getArguments().getSerializable(ARG_PROJECT);
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
         }
@@ -58,10 +73,11 @@ public class JuryDetailsFragment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_jury_details_project, container, false);
+        View v = inflater.inflate(R.layout.fragment_all_projects, container, false);
 
         textTitle = v.findViewById(R.id.projectTitle);
         textTitle.setText(project.getProjectTitle());
+
         posterIndicator = v.findViewById(R.id.posterBoolean);
 
         if(project.getProjectPoster()){
@@ -95,5 +111,4 @@ public class JuryDetailsFragment  extends Fragment {
         });
         return v;
     }
-
 }

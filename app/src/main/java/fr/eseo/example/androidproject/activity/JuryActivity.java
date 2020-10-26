@@ -112,7 +112,7 @@ public class JuryActivity extends AppCompatActivity {
 
     public void seeProjects(View view) {
         Button button = view.findViewById(R.id.button_projects);
-        intent = new Intent(this.getApplicationContext(), ProjectCommActivity.class);
+        intent = new Intent(this.getApplicationContext(), AllProjectsActivity.class);
         intent.putExtra("TOKEN", token);
         intent.putExtra("USERNAME", username);
         button.setOnClickListener(new View.OnClickListener() {
