@@ -18,12 +18,14 @@ import java.nio.ByteBuffer;
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
+import fr.eseo.example.androidproject.activity.VisitorActivity;
+import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.PosterFragment;
 
 public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
-    //private ProjectsDetailsCommActivity projectsDetailsCommActivity;
+
     private PosterFragment posterFragment;
     private SSLSocketFactory sslSocketFactory;
 
@@ -42,26 +44,7 @@ public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... params){
         Bitmap bitmap = null;
 
-        System.out.println(params[0]);
-
         String result = Utils.getStringFromRequestWS(params[0], params[1], this.sslSocketFactory);
-
-        /*
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = Utils.calculateInSampleSize(options,50, 75);
-        options.inJustDecodeBounds = true;
-        bitmap = BitmapFactory.decodeStream(inputStream, null, options);
-        */
-        /*
-        try {
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
-            ImageDecoder.Source source = ImageDecoder.createSource(byteBuffer);
-            bitmap = ImageDecoder.decodeBitmap(source);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
 
         bitmap = Utils.decodeBase64ToBitmap(result);
 
@@ -70,8 +53,9 @@ public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap){
-        //this.projectsDetailsCommActivity.downloadImage(bitmap);
-        this.posterFragment.treatmentResult(bitmap);
+        if(this.posterFragment != null){
+            this.posterFragment.treatmentResult(bitmap);
+        }
     }
 
 

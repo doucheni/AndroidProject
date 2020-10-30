@@ -10,6 +10,7 @@ public class ProjectModel implements Serializable {
     private String projectTitle;
     private String projectDescription;
     private Boolean projectPoster;
+    private String projectPosterString;
     private int confidentiality;
     private String supervisor;
 
@@ -72,5 +73,21 @@ public class ProjectModel implements Serializable {
 
     public void setSupervisor(String supervisor) {
         this.supervisor = supervisor;
+    }
+
+    /**
+     * Getter of project's poster (String format)
+     * @return projectPosterString the poster in String format
+     */
+    public String getProjectPosterString() {
+        return projectPosterString;
+    }
+
+    /**
+     * Setter of project's poster (String format)
+     * @param projectPosterString the new poster in String format
+     */
+    public void setProjectPosterString(String projectPosterString) {
+        this.projectPosterString = projectPosterString;
     }
 }

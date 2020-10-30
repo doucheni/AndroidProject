@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +98,7 @@ public class ProjectCommActivity extends AppCompatActivity {
                     pseudoJuryModelList.add(pseudoJuryModel);
 
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel);
+                    Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel, username, token);
                     ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
                     ft.commit();
                 }else{
@@ -159,6 +162,7 @@ public class ProjectCommActivity extends AppCompatActivity {
         }catch (JSONException e){
             e.printStackTrace();
         }
+
         this.progressDialog.dismiss();
     }
 
@@ -207,6 +211,7 @@ public class ProjectCommActivity extends AppCompatActivity {
                     projectModel.setProjectTitle(project_title);
                     projectModel.setProjectDescription(project_description);
                     projectModel.setProjectPoster(true);
+                    projectModel.setProjectPosterString(poster);
                     projectsRandom.add(projectModel);
                 }
             }
@@ -222,10 +227,11 @@ public class ProjectCommActivity extends AppCompatActivity {
         pseudoJuryModelList.add(pseudoJuryModel);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel);
+        Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel, username, token);
         ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
         ft.commit();
 
         this.progressDialog.dismiss();
     }
+
 }

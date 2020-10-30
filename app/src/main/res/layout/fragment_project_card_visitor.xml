@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProjectCardVisitor"
+    android:orientation="vertical"
+    android:background="@drawable/list_border"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Project's title"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:id="@+id/project_title"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voir poster"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:id="@+id/button_poster"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="25dp"
+            android:paddingLeft="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:id="@+id/project_description"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tincidunt rhoncus rhoncus. Maecenas vel cursus justo, vitae eleifend tellus. Morbi at hendrerit diam. In pretium leo sit amet tristique lacinia. Ut semper dui nec arcu sollicitudin dictum. Quisque orci tellus, tincidunt id consectetur in, ultricies sed quam. In hac habitasse platea dictumst. Donec justo libero, rutrum id ullamcorper et, dictum nec tortor. Morbi porta scelerisque diam et ultrices. Nam libero magna, consectetur quis dapibus vel, rutrum a eros. Sed a ex luctus, posuere erat at, consequat nibh. Nam sed mi vitae urna auctor ornare in non est. Curabitur mattis leo urna, vel tristique felis faucibus sed."
+            android:padding="10dp"
+            android:justificationMode="inter_word"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Laisser un commentaire"
+            android:textSize="25dp"
+            android:paddingLeft="10dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:inputType="text|textMultiLine"
+            android:gravity="top"
+            android:hint="Mon commentaire ..."
+            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:textSize="15dp"
+            android:id="@+id/project_comment"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Noter le projet"
+            android:textSize="25dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:hint="20"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textSize="18dp"
+                android:id="@+id/project_mark"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / 20"
+                android:textSize="18dp"
+                android:inputType="number"/>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Envoyer"
+                android:textSize="18dp"
+                android:layout_marginLeft="120dp"
+                android:id="@+id/btn_send_data"/>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -26,9 +26,13 @@ public class PseudoJuryProjectsComm extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PJ = "pseudojury";
+    private static final String ARG_USERNAME = "username";
+    private static final String ARG_TOKEN = "token";
 
     // TODO: Rename and change types of parameters
     private PseudoJuryModel pseudoJuryModel;
+    private String username;
+    private String token;
 
     public PseudoJuryProjectsComm() {
         // Required empty public constructor
@@ -42,10 +46,12 @@ public class PseudoJuryProjectsComm extends Fragment {
      * @return A new instance of fragment pseudoJuryProjectsComm.
      */
     // TODO: Rename and change types and number of parameters
-    public static PseudoJuryProjectsComm newInstance(PseudoJuryModel pseudoJuryModel) {
+    public static PseudoJuryProjectsComm newInstance(PseudoJuryModel pseudoJuryModel, String username, String token) {
         PseudoJuryProjectsComm fragment = new PseudoJuryProjectsComm();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PJ, pseudoJuryModel);
+        args.putString(ARG_USERNAME, username);
+        args.putString(ARG_TOKEN, token);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +61,8 @@ public class PseudoJuryProjectsComm extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             pseudoJuryModel = (PseudoJuryModel)getArguments().getSerializable(ARG_PJ);
+            username = getArguments().getString(ARG_USERNAME);
+            token = getArguments().getString(ARG_TOKEN);
         }
     }
 
@@ -95,6 +103,8 @@ public class PseudoJuryProjectsComm extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), logon.class);
                 intent.putExtra(ARG_PJ, pseudoJuryModel);
+                intent.putExtra(ARG_USERNAME, username);
+                intent.putExtra(ARG_TOKEN, token);
                 startActivity(intent);
             }
         });

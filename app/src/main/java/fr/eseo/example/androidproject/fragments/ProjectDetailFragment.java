@@ -1,5 +1,6 @@
 package fr.eseo.example.androidproject.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,13 +8,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
 
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.UserModel;
+import fr.eseo.example.androidproject.room.EseoDatabase;
+import fr.eseo.example.androidproject.room.entities.CommentsVisitor;
+import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 import fr.eseo.example.androidproject.room.entities.Project;
 import fr.eseo.example.androidproject.room.entities.User;
 
@@ -33,8 +40,6 @@ public class ProjectDetailFragment extends Fragment {
     private TextView descriptionProject;
     private TextView confidProject;
     private TextView supervisorProject;
-    private LinearLayout memberContainer;
-    private LinearLayout juryContainer;
 
     public ProjectDetailFragment() {
         // Required empty public constructor
@@ -87,4 +92,5 @@ public class ProjectDetailFragment extends Fragment {
 
         return view;
     }
+
 }

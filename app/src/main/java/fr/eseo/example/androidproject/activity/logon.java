@@ -121,11 +121,15 @@ public class logon extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = getIntent();
                 PseudoJuryModel pseudoJuryModel = (PseudoJuryModel)intent.getSerializableExtra("pseudojury");
+                String usernameComm = intent.getStringExtra("username");
+                String tokenComm = intent.getStringExtra("token");
                 if(pseudoJuryModel == null){
                     Toast.makeText(logon.this, "Demandez l'intervention d'un membre du service de communication", Toast.LENGTH_LONG).show();
                 }else{
                     Intent intentVisitor = new Intent(ctx, VisitorActivity.class);
                     intentVisitor.putExtra("pseudojury", pseudoJuryModel);
+                    intentVisitor.putExtra("username", usernameComm);
+                    intentVisitor.putExtra("token", tokenComm);
                     startActivity(intentVisitor);
                 }
             }
