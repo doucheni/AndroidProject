@@ -12,35 +12,37 @@
         android:id="@+id/projectTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Project_title"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:textSize="20dp"
+        android:layout_marginStart="10dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhiteText"
+        android:fontFamily="@font/roboto"
         />
 
     <TextView
         android:id="@+id/posterBoolean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="poster"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="end"
-        android:textSize="20dp"
-        android:layout_marginLeft="10dp">
-    </TextView>
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"/>
 
     <TextView
         android:id="@+id/confidentialityIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confidentiality"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_gravity="end"
-        android:layout_marginLeft="10dp"
-        ></TextView>
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"
+        />
 
 </LinearLayout>

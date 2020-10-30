@@ -10,13 +10,13 @@
         android:id="@+id/titleProject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Project_title"
-        android:textSize="35dp"
+        android:textSize="35sp"
         android:gravity="center_horizontal"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp">
-
-    </TextView>
+        android:paddingBottom="10dp"
+        android:fontFamily="@font/diavlo"
+        android:textColor="@color/colorWhiteText"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,20 +26,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:textSize="25dp"
-            android:layout_marginTop="20dp"></TextView>
+            android:text="@string/content_description_title"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/colorWhiteText"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/descriptionProject"
             android:layout_marginTop="20dp"
-            android:text="Contenu"
-            android:textSize="20dp"
-            android:justificationMode="inter_word">
-
-        </TextView>
+            android:textSize="20sp"
+            android:justificationMode="inter_word"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/colorWhiteText"/>
 
     </LinearLayout>
 
@@ -51,20 +52,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Condidentialité : "
-            android:layout_marginTop="20dp">
-        </TextView>
+            android:textSize="20sp"
+            android:text="@string/content_confidentiality_title"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"/>
 
         <TextView
             android:id="@+id/confidentialityProject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:layout_marginTop="20dp"
-            android:textSize="20dp">
-
-        </TextView>
+            android:textSize="20sp"
+            android:textColor="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"/>
 
     </LinearLayout>
 
@@ -76,18 +77,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Supervisor : "
-            android:layout_marginTop="20dp">
-        </TextView>
+            android:textSize="20sp"
+            android:text="@string/content_supervisor_title"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"/>
 
         <TextView
             android:id="@+id/supervisorProject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Name"
-            android:layout_marginTop="20dp"></TextView>
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"/>
 
     </LinearLayout>
 

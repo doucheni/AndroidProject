@@ -45,7 +45,7 @@ public class logon extends AppCompatActivity{
     private SSLSocketFactory sslSocket;
 
     private Toast errorConnectionToast;
-    private Button linkVisitor;
+    private TextView linkVisitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

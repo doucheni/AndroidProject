@@ -1,9 +1,40 @@
 <resources>
-    <string name="app_name">AndroidProject</string>
+    <string name="app_name">JPO ESEO</string>
     <string name="project_title">Project Title</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="jury_id">Jury_id</string>
     <string name="jury_date">Jury_date</string>
     <string name="jury_name">jury_name</string>
+
+    <!-- LOGON ACTIVITY-->
+    <string name="content_description_logo_ESEO">ESEOs logo</string>
+    <string name="content_description_E_Logo">E letter from ESEO logo</string>
+    <string name="content_title_logon">Journée Portes Ouvertes</string>
+    <string name="content_username">Username</string>
+    <string name="content_password">Password</string>
+    <string name="content_btn_login">Se connecter</string>
+    <string name="content_link_visitor">Je suis visiteur</string>
+
+    <!-- ACTIVITY COM PROJECTS-->
+    <string name="content_title_acp">Liste des projets</string>
+    <string name="content_button_newPJ">Créer PJ</string>
+    <string name="content_button_autoPJ">Auto PJ</string>
+    <string name="content_title_PJ">Pseudo Jury</string>
+    <string name="content_default_no_PJ">Aucun pseudo jury créée.</string>
+
+    <!-- ACTIVITY PROJECTS DETAILS COMM -->
+    <string name="content_student_title">Etudiants : </string>
+    <string name="content_button_detail">Détails</string>
+    <string name="content_button_poster">Poster</string>
+    <string name="content_marks_title">Note(s) : </string>
+    <string name="content_comments_title">Commentaire(s) : </string>
+    <string name="content_button_export">Exporter</string>
+
+    <!-- FRAGMENT JURY PROJECT DETAILS COMM -->
+    <string name="content_jury_title">Jury</string>
+
+    <!-- FRAGMENT PROJECT DETAILS -->
+    <string name="content_description_title">Description : </string>
+    <string name="content_confidentiality_title">Confidentialité : </string>
+    <string name="content_supervisor_title">Supervisor : </string>
 </resources>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,7 +9,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:background="@drawable/gradient_blue">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,16 +25,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/student_container"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Etudiants  "
-                android:textSize="20dp"
-                android:layout_marginBottom="20dp">
-
-            </TextView>
+                android:text="@string/content_student_title"
+                android:textSize="20sp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"/>
 
 
         </LinearLayout>
@@ -58,15 +57,21 @@
             <Button
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Details"
-                android:id="@+id/button_details"></Button>
+                android:text="@string/content_button_detail"
+                android:id="@+id/button_details"
+                android:background="@drawable/button_background_red"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"/>
 
             <Button
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Poster"
-                android:id="@+id/button_poster">
-            </Button>
+                android:text="@string/content_button_poster"
+                android:id="@+id/button_poster"
+                android:background="@drawable/button_background_red"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="20dp"/>
 
         </LinearLayout>
 
@@ -80,8 +85,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Note(s)"
-                android:textSize="20dp"/>
+                android:text="@string/content_marks_title"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"/>
 
 
         </LinearLayout>
@@ -96,8 +103,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Commentaire(s)"
-                android:textSize="20dp"/>
+                android:text="@string/content_comments_title"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"/>
 
         </LinearLayout>
 
@@ -111,8 +120,11 @@
             <Button
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="Exporter"
-                android:id="@+id/btn_export"/>
+                android:text="@string/content_button_export"
+                android:id="@+id/btn_export"
+                android:background="@drawable/button_background_red"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/roboto"/>
 
         </LinearLayout>
 

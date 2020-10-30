@@ -1,59 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="fr.eseo.example.androidproject.activity.logon">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_blue">
+    <LinearLayout
 
-
-    <EditText
-        android:id="@+id/username"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
-        android:padding="15dp"
-        android:inputType="textEmailAddress"
-        android:textSize="15sp"
-        android:hint="username"></EditText>
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
-        android:hint="password"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:textSize="15sp"></EditText>
-
-    <Button
-        android:id="@+id/activity_logon_btn"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="10dp"
-
-        android:padding="20dp"
-        android:text="Login"></Button>
-
-    <Button
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Je suis visiteur"
-        android:textSize="20dp"
-        android:layout_marginTop="35dp"
-        android:layout_gravity="center"
-        android:background="#0000"
-        android:id="@+id/link_visitor"/>
+        android:orientation="vertical"
+        tools:context="fr.eseo.example.androidproject.activity.logon"
+        >
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_eseo_couleurs"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/content_description_logo_ESEO" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:letterSpacing="0.3"
+            android:text="@string/content_title_logon"
+            android:textColor="@color/colorWhiteText"
+            android:textSize="25sp"
+            android:fontFamily="@font/diavlo"/>
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorDeepBlue"
+            android:drawableStart="@drawable/ic_action_user"
+            android:hint="@string/content_username"
+            android:inputType="textEmailAddress"
+            android:padding="15dp"
+            android:textColor="@color/colorWhiteText"
+            android:textColorHint="@color/colorWhiteText"
+            android:textSize="15sp"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/roboto"
+            android:autofillHints="username"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="50dp"
+            android:hint="@string/content_password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textSize="15sp"
+            android:background="@color/colorDeepBlue"
+            android:textColor="@color/colorWhiteText"
+            android:drawableStart="@drawable/ic_action_pass"
+            android:drawablePadding="10dp"
+            android:textColorHint="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"
+            android:autofillHints="password"/>
+
+        <Button
+            android:id="@+id/activity_logon_btn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:text="@string/content_btn_login"
+            android:background="@drawable/button_background_deepblue"
+            android:textColor="@color/colorWhiteText"
+            android:fontFamily="@font/roboto"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_link_visitor"
+            android:gravity="center"
+            android:layout_marginTop="35dp"
+            android:id="@+id/link_visitor"
+            android:textSize="20sp"
+            android:letterSpacing="0.1"
+            android:textStyle="bold"
+            android:autoLink="all"
+            android:linksClickable="true"
+            android:fontFamily="@font/roboto"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:src="@drawable/ic_e_rouge"
+        android:contentDescription="@string/content_description_E_Logo"/>
+
+</RelativeLayout>

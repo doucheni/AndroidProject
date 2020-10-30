@@ -6,25 +6,18 @@
     tools:context=".fragments.IdentityStudentsFragment"
     android:orientation="horizontal">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/studentForeName"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="ouiiiiii"
-        android:textSize="20dp">
-
-    </TextView>
-
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/studentSurName"
-        android:text="nooooooooon"
-        android:textSize="20dp">
-
-    </TextView>
-
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"/>
 </LinearLayout>

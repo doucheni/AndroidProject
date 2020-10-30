@@ -1,6 +1,9 @@
 package fr.eseo.example.androidproject.fragments;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -75,6 +78,8 @@ public class JuryProjectDetailsComm extends DialogFragment {
             params.setMargins(10,20,0,20);
             textView.setLayoutParams(params);
             textView.setText(jury.getMembers().get(i).getUserForename() + " " + jury.getMembers().get(i).getUserSurname());
+            Typeface face = ResourcesCompat.getFont(getContext(), R.font.roboto);
+            textView.setTypeface(face);
             try{
                 linearLayout.addView(textView);
             }catch(Exception e){
@@ -89,6 +94,9 @@ public class JuryProjectDetailsComm extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
     }
 }

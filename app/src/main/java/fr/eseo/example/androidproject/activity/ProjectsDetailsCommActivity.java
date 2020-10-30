@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,6 +14,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -149,6 +152,9 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                         params.setMargins(10, 20, 0, 0);
                         markView.setLayoutParams(params);
                         markView.setText(String.valueOf(mark.getMark()) + " / 20");
+                        markView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
+                        Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
+                        markView.setTypeface(face);
 
                         // Adding the textview in the main thread
                         runOnUiThread(new Runnable() {
@@ -172,6 +178,9 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                     params.setMargins(10, 20, 0, 0);
                     markView.setLayoutParams(params);
                     markView.setText("Aucune note sur ce projet");
+                    markView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
+                    Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
+                    markView.setTypeface(face);
 
                     // Adding the textview in the main thread
                     runOnUiThread(new Runnable() {
@@ -196,6 +205,9 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                         params.setMargins(10, 20, 0, 0);
                         commentView.setLayoutParams(params);
                         commentView.setText(comment.getComment());
+                        commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
+                        Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
+                        commentView.setTypeface(face);
 
                         // Adding the textView in the main thread
                         runOnUiThread(new Runnable() {
@@ -219,6 +231,9 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                     params.setMargins(10, 20, 0, 0);
                     commentView.setLayoutParams(params);
                     commentView.setText("Aucun commentaire pour ce projet");
+                    commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
+                    Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
+                    commentView.setTypeface(face);
 
                     // Adding the textView in the main thread
                     runOnUiThread(new Runnable() {
@@ -238,7 +253,6 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
         buttonExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(projectMarks.size() > 0 | projectComments.size() > 0){
                     createFile("Project_"+project.getProjectId()+"_Review");
                 }else{
@@ -246,49 +260,12 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                 }
             }
         });
-
-        System.out.println(ProjectsDetailsCommActivity.this.getFilesDir().getAbsolutePath());
-
     }
 
     public void presentJury(JuryModel juryModel){
         DialogFragment dialogJury = JuryProjectDetailsComm.newInstance(juryModel);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         dialogJury.show(ft, "jury");
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
-        try {
-            File gpxfile = new File(Environment.getStorageDirectory(), "PFE_JPO/" + sFileName);
-            if(!gpxfile.exists()){
-                gpxfile.mkdirs();
-                gpxfile.createNewFile();
-            }
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append(sBody);
-            writer.flush();
-            writer.close();
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void WriteBtn(String content, String fileName, Context context) {
-        // add-write text into file
-        try {
-            FileOutputStream fileout=openFileOutput(fileName, MODE_PRIVATE);
-            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
-            outputWriter.write(content);
-            outputWriter.close();
-            //display file saved message
-            Toast.makeText(context, "File saved successfully!",
-                    Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private static final int WRITE_REQUEST_CODE = 101;
