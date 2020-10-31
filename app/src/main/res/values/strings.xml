@@ -9,6 +9,7 @@
     <!-- LOGON ACTIVITY-->
     <string name="content_description_logo_ESEO">ESEOs logo</string>
     <string name="content_description_E_Logo">E letter from ESEO logo</string>
+    <string name="content_description_campus_baseline">ESEOs baseline campus</string>
     <string name="content_title_logon">Journée Portes Ouvertes</string>
     <string name="content_username">Username</string>
     <string name="content_password">Password</string>
@@ -16,7 +17,8 @@
     <string name="content_link_visitor">Je suis visiteur</string>
 
     <!-- ACTIVITY COM PROJECTS-->
-    <string name="content_title_acp">Liste des projets</string>
+    <string name="content_title_project_acp">Liste des projets</string>
+    <string name="content_title_pj_acp">Liste des Pseudo Jury</string>
     <string name="content_button_newPJ">Créer PJ</string>
     <string name="content_button_autoPJ">Auto PJ</string>
     <string name="content_title_PJ">Pseudo Jury</string>
@@ -30,6 +32,10 @@
     <string name="content_comments_title">Commentaire(s) : </string>
     <string name="content_button_export">Exporter</string>
 
+    <!-- ACTIVITY VISITOR -->
+    <string name="content_title_av">Vos Projets : </string>
+    <string name="content_description_innovation_baseline">ESEOs baseline innovation</string>
+
     <!-- FRAGMENT JURY PROJECT DETAILS COMM -->
     <string name="content_jury_title">Jury</string>
 
@@ -37,4 +43,14 @@
     <string name="content_description_title">Description : </string>
     <string name="content_confidentiality_title">Confidentialité : </string>
     <string name="content_supervisor_title">Supervisor : </string>
+
+    <!-- FRAGMENT PROJECT CARD VISITOR -->
+    <string name="content_comment_title">Laisser un commentaire : </string>
+    <string name="content_comment_input">Mon commentaire …</string>
+    <string name="content_mark_title">Noter le project : </string>
+    <string name="content_mark_input">20</string>
+    <string name="content_mark_info"> / 20</string>
+    <string name="content_button_send">Envoyer</string>
+
+
 </resources>

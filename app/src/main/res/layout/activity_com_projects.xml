@@ -1,102 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_blue">
+
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/gradient_blue">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/content_title_acp"
-            android:gravity="center"
-            android:textSize="35sp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/colorWhiteText"
-            android:fontFamily="@font/diavlo"
-            android:letterSpacing="0.1"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
-
-            <Button
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:text="@string/content_button_newPJ"
-                android:id="@+id/btn_newPJ"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/button_background_red"
-                android:textColor="@color/colorWhiteText"
-                android:fontFamily="@font/roboto"/>
-
-            <Button
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/content_button_autoPJ"
-                android:id="@+id/btn_autoPJ"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_background_red"
-                android:textColor="@color/colorWhiteText"
-                android:fontFamily="@font/roboto"/>
-
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/pseudojury_container_main"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:background="@drawable/button_background_deepblue"
-            android:layout_marginTop="20dp">
+            >
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
-                android:text="@string/content_title_PJ"
-                android:textSize="25sp"
+                android:text="@string/content_title_pj_acp"
                 android:gravity="center"
+                android:textSize="35sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorWhiteText"
                 android:fontFamily="@font/diavlo"
-                android:textColor="@color/colorWhiteText"/>
+                android:letterSpacing="0.1"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <Button
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/content_button_newPJ"
+                    android:id="@+id/btn_newPJ"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/button_background_red"
+                    android:textColor="@color/colorWhiteText"
+                    android:fontFamily="@font/roboto"/>
+
+                <Button
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/content_button_autoPJ"
+                    android:id="@+id/btn_autoPJ"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/button_background_red"
+                    android:textColor="@color/colorWhiteText"
+                    android:fontFamily="@font/roboto"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/pseudojury_container_main"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:background="@drawable/button_background_deepblue"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/content_title_PJ"
+                    android:textSize="25sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/diavlo"
+                    android:textColor="@color/colorWhiteText"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/content_default_no_PJ"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="@color/colorWhiteText"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/content_default_no_PJ"
-                android:layout_marginTop="10dp"
+                android:text="@string/content_title_project_acp"
                 android:gravity="center"
-                android:fontFamily="@font/roboto"
-                android:textColor="@color/colorWhiteText"/>
-
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:fillViewport="true"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="vertical"
-            android:layout_marginTop="20dp">
+                android:textSize="35sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorWhiteText"
+                android:fontFamily="@font/diavlo"
+                android:letterSpacing="0.1"/>
 
             <LinearLayout
                 android:id="@+id/project_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
             </LinearLayout>
 
-        </ScrollView>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="20dp"
+            android:src="@drawable/ic_e_rouge"
+            android:contentDescription="@string/content_description_E_Logo"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
 
 
 

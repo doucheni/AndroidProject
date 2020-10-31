@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_blue">
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -97,13 +97,19 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:padding="20dp"
             android:src="@drawable/ic_e_rouge"
             android:contentDescription="@string/content_description_E_Logo"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_campuses_blanc"
+            android:contentDescription="@string/content_description_campus_baseline"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 
