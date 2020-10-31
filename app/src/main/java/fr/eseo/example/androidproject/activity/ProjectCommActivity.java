@@ -3,19 +3,13 @@ package fr.eseo.example.androidproject.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,27 +33,41 @@ import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.ProjectsListCommFragment;
 import fr.eseo.example.androidproject.fragments.PseudoJuryProjectsComm;
-import fr.eseo.example.androidproject.room.EseoDatabase;
-import fr.eseo.example.androidproject.api.JuryModel;
-import fr.eseo.example.androidproject.room.entities.Project;
-import fr.eseo.example.androidproject.room.entities.User;
 
+/**
+ * Class for the main activity of a Communication Member
+ * In this Activity, the user can :
+ *  See all projects
+ *  Create a pseudo-jury manually
+ *  Create a pseudo-jury automatically
+ *  Select a project to see more details (poster, description, students, jury, ...)
+ */
 public class ProjectCommActivity extends AppCompatActivity {
 
-    public static final String PROJECT_ID = "Project_id";
-
+    // SSLSocketFactory configured with certificate
     public SSLSocketFactory sslSocketFactory;
+
+    // Toasts for error
     public Toast errorRequestToast;
     private Toast errorResultToast;
+
+    // Instance of CommAsyncTask for LIPRJ request
     private CommAsyncTask commAsyncTask;
+
+    // Loading ProgressDialog during request
     private ProgressDialog progressDialog;
+
+    // Intent's data
     private String token;
     private String username;
-    private EseoDatabase database;
 
+    // List of ProjectModel selected by the user
     private List<ProjectModel> projectsSelected = new ArrayList<>();
+
+    // List of PseudoJuryModel created by the user
     private List<PseudoJuryModel> pseudoJuryModelList = new ArrayList<>();
 
+    // Views from XML Layout
     private Button btnNewPJ;
     private Button btnAutoPJ;
     private LinearLayout pseudoJuryContainer;
@@ -68,58 +75,28 @@ public class ProjectCommActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        this.token = intent.getStringExtra("TOKEN");
-        this.username = intent.getStringExtra("USERNAME");
-        final Context ctx = getApplicationContext();
-        sslSocketFactory = Utils.configureSSLContext(ctx).getSocketFactory();
-        errorRequestToast = Toast.makeText(ProjectCommActivity.this, "Error during the request", Toast.LENGTH_LONG);
-        errorResultToast = Toast.makeText(ProjectCommActivity.this, "Projects/Jury are not available", Toast.LENGTH_LONG);
         setContentView(R.layout.activity_com_projects);
-        commAsyncTask = new CommAsyncTask(this, sslSocketFactory);
-        this.progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
-        String requestProject = "https://172.24.5.16/pfe/webservice.php?q=LIPRJ&user="+this.username+"&token="+this.token;
-        commAsyncTask.execute(requestProject, "GET");
 
-        pseudoJuryContainer = findViewById(R.id.pseudojury_container_main);
-        btnNewPJ = findViewById(R.id.btn_newPJ);
-        btnAutoPJ = findViewById(R.id.btn_autoPJ);
+        // Initialization of each ProjectCommActivity's variables
+        this.initClassVariables();
 
-        btnNewPJ.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if(projectsSelected.size() > 0){
-                    PseudoJuryModel pseudoJuryModel = new PseudoJuryModel(projectsSelected);
+        // Run AsyncTask for the connection to the ESEO's API
+        this.runCommAsynTask();
 
-                    if(pseudoJuryModelList.size() == 0){
-                        pseudoJuryContainer.removeViewAt(1);
-                    }
+        // Add the a OnClickListener on btnNewPJ
+        this.initBtnNewPJAction();
 
-                    pseudoJuryModelList.add(pseudoJuryModel);
-
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel, username, token);
-                    ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
-                    ft.commit();
-                }else{
-                    Toast.makeText(ProjectCommActivity.this, "Vous devez selectionner au moins un projet", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        btnAutoPJ.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                RandomProjectsPJAsyncTask randomProjectsPJAsyncTask = new RandomProjectsPJAsyncTask(ProjectCommActivity.this, sslSocketFactory);
-                String urlRequest = "https://172.24.5.16/pfe/webservice.php?q=PORTE&user=" + username + "&token=" + token;
-                progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
-                randomProjectsPJAsyncTask.execute(urlRequest, "GET");
-            }
-        });
+        // Add a OnClickListener on btnAutoPJ
+        this.initBtnAutoPJAction();
 
     }
 
-    public void treatmentResult(JSONObject jsonObject){
+    /**
+     * Function wich obtain the result of the LIPRJ request (API)
+     * Create a Fragment for each project in the result
+     * @param jsonObject, the result in JSONObject format
+     */
+    public void treatmentResultLIPRJ(JSONObject jsonObject){
         List<ProjectModel> projects = new ArrayList<>();
         HashMap<Integer, StudentsGroup> groups = new HashMap<>();
         try{
@@ -232,6 +209,90 @@ public class ProjectCommActivity extends AppCompatActivity {
         ft.commit();
 
         this.progressDialog.dismiss();
+    }
+
+    /**
+     * Adding a OnClickListener for button of New Pseudo-Jury's creation
+     * Creation of a new PseudoJury
+     * Add it in the list of PseudoJury
+     * Creation of a new fragment for the new PseudoJury
+     */
+    private void initBtnNewPJAction(){
+        btnNewPJ.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(projectsSelected.size() > 0){
+                    PseudoJuryModel pseudoJuryModel = new PseudoJuryModel(projectsSelected);
+
+                    if(pseudoJuryModelList.size() == 0){
+                        pseudoJuryContainer.removeViewAt(1);
+                    }
+
+                    pseudoJuryModelList.add(pseudoJuryModel);
+
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel, username, token);
+                    ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
+                    ft.commit();
+                }else{
+                    Toast.makeText(ProjectCommActivity.this, "Vous devez selectionner au moins un projet", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Adding a OnClickListener for button of Auto Pseudo-Jury's creation
+     * Send a PORTE request to get several random project
+     * Create a new PseudoJury
+     * Add it in the list of PseudoJury
+     * Creation of a new fragment for the PseudoJury
+     */
+    private void initBtnAutoPJAction(){
+        btnAutoPJ.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                RandomProjectsPJAsyncTask randomProjectsPJAsyncTask = new RandomProjectsPJAsyncTask(ProjectCommActivity.this, sslSocketFactory);
+                progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
+                randomProjectsPJAsyncTask.execute(Utils.buildUrlForPORTE(username, token), "GET");
+            }
+        });
+    }
+
+    /**
+     * Initialization of each variables from the class ProjectCommActivity
+     */
+    private void initClassVariables(){
+        // Get intent's data from Logon activity
+        Intent intent = getIntent();
+        this.token = intent.getStringExtra("TOKEN");
+        this.username = intent.getStringExtra("USERNAME");
+
+        // Configuration of the sslSocket
+        sslSocketFactory = Utils.configureSSLContext(getApplicationContext()).getSocketFactory();
+
+        // Toast's initialization
+        errorRequestToast = Toast.makeText(ProjectCommActivity.this, "Error during the request", Toast.LENGTH_LONG);
+        errorResultToast = Toast.makeText(ProjectCommActivity.this, "Projects/Jury are not available", Toast.LENGTH_LONG);
+
+        // Views initialization
+        pseudoJuryContainer = findViewById(R.id.pseudojury_container_main);
+        btnNewPJ = findViewById(R.id.btn_newPJ);
+        btnAutoPJ = findViewById(R.id.btn_autoPJ);
+    }
+
+    /**
+     * Run CommAsyncTask and display the ProgressDialog during the request
+     */
+    private void runCommAsynTask(){
+        // Init CommAsyncTask
+        this.commAsyncTask = new CommAsyncTask(this, this.sslSocketFactory);
+
+        // Showing the ProgressDialog Loading
+        this.progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
+
+        // Execution of CommAsynTask
+        commAsyncTask.execute(Utils.buildUrlForLIPRJ(this.username, this.token), "GET");
     }
 
 }

@@ -2,35 +2,29 @@ package fr.eseo.example.androidproject.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.logon;
-import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.PseudoJuryModel;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link PseudoJuryProjectsComm#newInstance} factory method to
- * create an instance of this fragment.
+ * Class of the fragment PseudoJuryProjectsComm
+ * For a PseudoJury given, create a TextView wich contain the title of each projects.
  */
 public class PseudoJuryProjectsComm extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    // Parameter's names
     private static final String ARG_PJ = "pseudojury";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
-    // TODO: Rename and change types of parameters
+    // Parameters
     private PseudoJuryModel pseudoJuryModel;
     private String username;
     private String token;
@@ -40,13 +34,12 @@ public class PseudoJuryProjectsComm extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param pseudoJuryModel Parameter 1.
+     * Create a new instance of the fragment
+     * @param pseudoJuryModel pseudoJuryModel, the pseudoJury of the fragment.
+     * @param username, user's username.
+     * @param token, user's token.
      * @return A new instance of fragment pseudoJuryProjectsComm.
      */
-    // TODO: Rename and change types and number of parameters
     public static PseudoJuryProjectsComm newInstance(PseudoJuryModel pseudoJuryModel, String username, String token) {
         PseudoJuryProjectsComm fragment = new PseudoJuryProjectsComm();
         Bundle args = new Bundle();
@@ -73,8 +66,27 @@ public class PseudoJuryProjectsComm extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_pseudo_jury_projects_comm, container, false);
 
+        // Get the linearLayout container
         LinearLayout linearLayout = v.findViewById(R.id.pseudojury_container);
 
+        // Add a TextView in the container
+        try{
+            linearLayout.addView(this.createTextView());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        // Add a OnClickListner on the view
+        this.initOnClickListenerAction(v);
+
+        return v;
+    }
+
+    /**
+     * Create a TextView wich contain each project's title of the PseudoJury
+     * @return textView, the TextView
+     */
+    private TextView createTextView(){
         TextView textView = new TextView(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -94,13 +106,15 @@ public class PseudoJuryProjectsComm extends Fragment {
         textView.setText(content);
         textView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.colorWhiteText));
 
-        try{
-            linearLayout.addView(textView);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        return textView;
+    }
 
-        v.setOnClickListener(new View.OnClickListener(){
+    /**
+     * Configure the action of View's OnClickListener
+     * @param v, the main View of the fragment
+     */
+    private void initOnClickListenerAction(View v){
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), logon.class);
@@ -110,7 +124,5 @@ public class PseudoJuryProjectsComm extends Fragment {
                 startActivity(intent);
             }
         });
-
-        return v;
     }
 }

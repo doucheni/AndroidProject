@@ -22,26 +22,41 @@ import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.room.entities.Project;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProjectsListCommFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Class of the fragment ProjectsListCommFragment
+ * For a project given, create a preview of the project :
+ *  Its title
+ *  Its poster disponibility
+ *  Its confidentiality
  */
 public class ProjectsListCommFragment extends Fragment {
 
+    private static final String MSG_POSTER_AVAILABLE = "Poster disponible.";
+    private static final String MSG_POSTER_UNAVAILABLE = "Poster indisponible.";
+    private static final String MSG_CONFID = "Confidentiel.";
+    private static final String MSG_CONFID_OK = "Non confidentiel.";
+
+    // Parameters name
     private static final String ARG_PROJECT = "project";
     private static final String ARG_STUDENTS = "students";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
-    private ProjectCommActivity mainActivity;
+    // Parameters
     private ProjectModel project;
     private StudentsGroup studentsGroup;
+    private String username;
+    private String token;
+
+    // Instance of ProjectCommActivity
+    private ProjectCommActivity mainActivity;
+
+    // Views from XML Layout
     private TextView textTitle;
     private TextView posterIndicator;
     private TextView confidentialityIndicator;
     private CheckBox checkBox;
-    private String username;
-    private String token;
+
+    // Intent
     private Intent intent;
 
     public ProjectsListCommFragment() {
@@ -49,10 +64,11 @@ public class ProjectsListCommFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param project Parameter 1.
+     * Create an instance of this fragment
+     * @param project, the ProjectModel of this fragment.
+     * @param studentsGroup, the Students members of the project
+     * @param username, the user's username
+     * @param token, the user's token
      * @return A new instance of fragment ProjectsDetailsCommFragment.
      */
     public static ProjectsListCommFragment newInstance(ProjectModel project, StudentsGroup studentsGroup, String username, String token) {
@@ -82,44 +98,84 @@ public class ProjectsListCommFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_projects_list_comm, container, false);
 
+        // Initialization of each ProjectsListCommFragment's variables
+       this.initVariables(v);
+
+       // Update View's values with project's values
+       this.updateViews();
+
+       // Add OnClickListener on the main view
+       this.initViewOnClickListener(v);
+
+       // Add OnClickListener on checkbox
+        this.initCheckBoxOnClickListener();
+
+        return v;
+    }
+
+    /**
+     * Initialization of each variable for ProjectListCommFragment class
+     */
+    private void initVariables(View v){
         mainActivity = (ProjectCommActivity)getActivity();
-
         textTitle = v.findViewById(R.id.projectTitle);
-        textTitle.setText(project.getProjectTitle());
-
         posterIndicator = v.findViewById(R.id.posterBoolean);
-
-        if(project.getProjectPoster()){
-            posterIndicator.setText("poster available");
-        }else{
-            posterIndicator.setText("No poster available");
-        }
-
         confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
-
-        if(project.getConfidentiality() != 0){
-            confidentialityIndicator.setText("Confidential project");
-        }else{
-            confidentialityIndicator.setText("Not confidential");
-        }
-
+        checkBox = v.findViewById(R.id.projectTitle);
         intent = new Intent(getActivity(), ProjectsDetailsCommActivity.class);
         intent.putExtra(ARG_PROJECT, project);
         intent.putExtra(ARG_STUDENTS, studentsGroup);
         intent.putExtra(ARG_USERNAME,username);
         intent.putExtra(ARG_TOKEN, token);
-        v.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(project.getConfidentiality() != 0){
-                        Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
-                    }else{
-                        startActivity(intent);
-                    }
-                }
-            });
+    }
 
-        checkBox = v.findViewById(R.id.projectTitle);
+    /**
+     * Change the view's value with project's values
+     */
+    private void updateViews(){
+        // Set the title of the proejct
+        textTitle.setText(project.getProjectTitle());
+
+        // Set the poster indicator
+        if(project.getProjectPoster()){
+            posterIndicator.setText(MSG_POSTER_AVAILABLE);
+        }else{
+            posterIndicator.setText(MSG_POSTER_UNAVAILABLE);
+        }
+
+        // Set the confidentiality indicator
+        if(project.getConfidentiality() != 0){
+            confidentialityIndicator.setText(MSG_CONFID);
+        }else{
+            confidentialityIndicator.setText(MSG_CONFID_OK);
+        }
+    }
+
+    /**
+     * Adding a OnClickListener for the main view.
+     * Redirect the user to ProjectsDetailsCommActivity class
+     * Transfer data to next activity
+     * If project is confidential : show a Toast
+     * @param v, the main View
+     */
+    private void initViewOnClickListener(View v){
+        v.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(project.getConfidentiality() != 0){
+                    Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
+                }else{
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    /**
+     * Adding a OnClickListener for the checkbox
+     * Update the list of project in ProjectCommActivity
+     */
+    private void initCheckBoxOnClickListener(){
         checkBox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -130,8 +186,5 @@ public class ProjectsListCommFragment extends Fragment {
                 }
             }
         });
-
-
-        return v;
     }
 }
