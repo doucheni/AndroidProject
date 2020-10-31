@@ -51,9 +51,7 @@ public class Utils {
      * @return SSLContext configured
      */
     public static SSLContext configureSSLContext(Context context){
-        // Get Certificate given by ESEO (DIS_Inter_CA.crt)
         InputStream certificateInput = context.getResources().openRawResource(R.raw.dis_inter_ca);
-        // Initialization Certificate and SSLContext
         Certificate cert;
         SSLContext sslContext = null;
         try {
@@ -81,7 +79,7 @@ public class Utils {
     }
 
     /**
-     * Send a request to the web service
+     * Send a request to the web service and return a InputStream result
      * @param url, url for the connection
      * @param requestMethod, methode's type (GET, POST, ...)
      * @param sslSocket, SSLSocketFactory configured with certificate
@@ -111,6 +109,13 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Send a request to the web service and return a String result
+     * @param url, url for the connection
+     * @param method, method's type (GET, POST, ...)
+     * @param sslSocketFactory, SSLSocketFactory configured with certificatie
+     * @return scannerText, the output of the request
+     */
     public static String getStringFromRequestWS(String url, String method, SSLSocketFactory sslSocketFactory){
         try{
             URL urlConnection = new URL(url);
@@ -151,6 +156,12 @@ public class Utils {
         return value;
     }
 
+    /**
+     * Get a specific value from a JSONArray with a specific key
+     * @param jsonArray, the JSONArray
+     * @param name, the name of the data we search
+     * @return value, the value with the key given
+     */
     public static String getJSONValue(JSONArray jsonArray, String name){
         String value = null;
         for(int i = 0; i < jsonArray.length(); i++){
@@ -214,6 +225,12 @@ public class Utils {
         return jsonObject;
     }
 
+    /**
+     * Get a JSONArray from a JSONObject
+     * @param jsonObject, the JSONObject
+     * @param nameValue, the key of the JSONArray
+     * @return jsonResult, the JSONArray wich has the key
+     */
     public static JSONArray getJSONFromJSON(JSONObject jsonObject, String nameValue){
         JSONArray jsonResult = null;
         try{
@@ -224,39 +241,11 @@ public class Utils {
         return jsonResult;
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeBase64ToBitmap(InputStream inputStream) {
-        try {
-            byte[] decodedString = IOUtils.toByteArray(inputStream);
-            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        } catch (IllegalArgumentException | IOException e) {
-            System.out.println("Error decoding:" + e.getMessage() );
-        }
-        return null;
-    }
-
+    /**
+     * Decode a img coded in Base64 with format String
+     * @param img, the image
+     * @return the Bitmap of the String img
+     */
     public static Bitmap decodeBase64ToBitmap(String img){
 
         try {
@@ -269,13 +258,47 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Build the Url of the LIJUR request
+     * @param username, the username of the user
+     * @param token, the token of the user
+     * @return the url in String format
+     */
     public static String buildUrlForLIJUR(String username, String token){
         System.out.println("https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token);
         return "https://172.24.5.16/pfe/webservice.php?q=LIJUR&user="+username+"&token="+token;
     }
 
+    /**
+     * Build the Url of the POSTR request
+     * @param username, the username of the user
+     * @param token, the token of the user
+     * @param project_id, the project's id
+     * @param format, the format of the image we want
+     * @return the url in String format
+     */
     public static String buildURLForPOSTR(String username, String token, int project_id, String format){
         return "https://172.24.5.16/pfe/webservice.php?q=POSTR&user="+username+"&proj="+project_id+"&style="+format+"&token="+token;
+    }
+
+    /**
+     * Build the url of LIPRJ request
+     * @param username, user's username in String
+     * @param token, user's token in String
+     * @return the url in String format
+     */
+    public static String buildUrlForLIPRJ(String username, String token){
+        return "https://172.24.5.16/pfe/webservice.php?q=LIPRJ&user="+username+"&token="+token;
+    }
+
+    /**
+     * Build the url of PORTE request
+     * @param username, user's username in String
+     * @param token, user's token in String
+     * @return the url in String format
+     */
+    public static String buildUrlForPORTE(String username, String token){
+        return "https://172.24.5.16/pfe/webservice.php?q=PORTE&user=" + username + "&token=" + token;
     }
 
 

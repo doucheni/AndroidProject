@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.VisitorActivity"
-    android:orientation="vertical">
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:scrollbarStyle="insideInset"
+    android:scrollbars="vertical"
+    android:background="@drawable/background_deepblue">
 
-    <TextView
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Vos projets"
-        android:textSize="25dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"/>
+        tools:context=".activity.VisitorActivity"
+        android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:scrollbarStyle="insideInset"
-        android:scrollbars="vertical">
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/visitor_project_container"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:text="@string/content_title_av"
+            android:textSize="35sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/diavlo"
+            android:textColor="@color/colorWhiteText" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/visitor_project_container"
+                android:orientation="vertical">
 
         </LinearLayout>
 
-    </ScrollView>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="20dp"
+            android:src="@drawable/ic_e_rouge"
+            android:contentDescription="@string/content_description_E_Logo"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_innovation_blanc"
+            android:contentDescription="@string/content_description_innovation_baseline"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
