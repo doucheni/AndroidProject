@@ -2,33 +2,26 @@ package fr.eseo.example.androidproject.fragments;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
-
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.JuryModel;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link JuryProjectDetailsComm#newInstance} factory method to
- * create an instance of this fragment.
+ * Class of the DialogFragment JuryProjectDetailsComm
+ * Display the project's jury
  */
 public class JuryProjectDetailsComm extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    // Argument's name
     private static final String ARG_JURY = "jury";
 
-    // TODO: Rename and change types of parameters
+    // Argument
     private JuryModel jury;
 
     public JuryProjectDetailsComm() {
@@ -36,13 +29,11 @@ public class JuryProjectDetailsComm extends DialogFragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Create a new instance of JuryProjectDetailsComm
      *
-     * @param juryModel Parameter 1.
+     * @param juryModel the JuryModel of the project.
      * @return A new instance of fragment JuryProjectDetailsComm.
      */
-    // TODO: Rename and change types and number of parameters
     public static JuryProjectDetailsComm newInstance(JuryModel juryModel) {
         JuryProjectDetailsComm fragment = new JuryProjectDetailsComm();
         Bundle args = new Bundle();
@@ -67,21 +58,16 @@ public class JuryProjectDetailsComm extends DialogFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_jury_project_details_comm, container, false);
 
+        // Initialization of container
         LinearLayout linearLayout = v.findViewById(R.id.jury_project_container);
 
         for(int i = 0; i < jury.getMembers().size(); i++){
-            TextView textView = new TextView(getActivity());
-
-            textView.setId(i); //Set id to remove in the future.
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(10,20,0,20);
-            textView.setLayoutParams(params);
-            textView.setText(jury.getMembers().get(i).getUserForename() + " " + jury.getMembers().get(i).getUserSurname());
-            Typeface face = ResourcesCompat.getFont(getContext(), R.font.roboto);
-            textView.setTypeface(face);
             try{
-                linearLayout.addView(textView);
+                linearLayout.addView(
+                        configureTextView(
+                                jury.getMembers().get(i).getUserForename() + " " + jury.getMembers().get(i).getUserSurname(), i
+                        )
+                );
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -91,6 +77,10 @@ public class JuryProjectDetailsComm extends DialogFragment {
         return v;
     }
 
+    /**
+     * Run when displaying the DialogFragment
+     * The window is going to take device's with (MATCH_PARENT)
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -99,4 +89,26 @@ public class JuryProjectDetailsComm extends DialogFragment {
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
     }
+
+    /**
+     * Configure a TextView with a specific content
+     * @param content, the text content of our TextView
+     * @param index, the id of the TextView (int)
+     * @return textView, our TextView configure
+     */
+    private TextView configureTextView(String content, int index){
+        TextView textView = new TextView(getActivity());
+
+        textView.setId(index); //Set id to remove in the future.
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(10,20,0,20);
+        textView.setLayoutParams(params);
+        textView.setText(content);
+        Typeface face = ResourcesCompat.getFont(getContext(), R.font.roboto);
+        textView.setTypeface(face);
+        return textView;
+    }
+
+
 }

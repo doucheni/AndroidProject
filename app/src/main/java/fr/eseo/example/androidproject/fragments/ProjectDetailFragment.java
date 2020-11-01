@@ -1,41 +1,34 @@
 package fr.eseo.example.androidproject.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.List;
-
 import fr.eseo.example.androidproject.R;
-import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
-import fr.eseo.example.androidproject.api.UserModel;
-import fr.eseo.example.androidproject.room.EseoDatabase;
-import fr.eseo.example.androidproject.room.entities.CommentsVisitor;
-import fr.eseo.example.androidproject.room.entities.MarksVisitor;
-import fr.eseo.example.androidproject.room.entities.Project;
-import fr.eseo.example.androidproject.room.entities.User;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProjectDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Class of the Fragment ProjectDetailFragment
+ * Display project's main information
+ *  Title
+ *  Description
+ *  Confidentiality
+ *  Supervisor
  */
-public class ProjectDetailFragment extends Fragment {
+public class  ProjectDetailFragment extends Fragment {
 
+    private static final String MSG_CONFID = "Confidentiel.";
+    private static final String MSG_CONFIG_OK = "Non confidentiel.";
+
+    // Argument's name
     private static final String ARG_PROJECT = "project";
-    private static final String ARG_JURY = "jury";
 
+    // Argument
     private ProjectModel project;
 
+    // Views from XML layout
     private  TextView titleProject;
     private TextView descriptionProject;
     private TextView confidProject;
@@ -46,10 +39,9 @@ public class ProjectDetailFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Create a instance of ProjectDetailFragment
      *
-     * @param project Parameter 1.
+     * @param project, our ProjectModel.
      * @return A new instance of fragment ProjectDetailFragment.
      */
     public static ProjectDetailFragment newInstance(ProjectModel project) {
@@ -73,24 +65,44 @@ public class ProjectDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_project_detail, container, false);
 
+        // Initialization of variables
+        this.initVariables(view);
+
+        // Update the TextViews
+        this.updateViews(this.project);
+
+        return view;
+    }
+
+    /**
+     * Initialization of the views
+     * @param view, our main view
+     */
+    private void initVariables(View view){
         titleProject = view.findViewById(R.id.titleProject);
         descriptionProject = view.findViewById(R.id.descriptionProject);
         confidProject = view.findViewById(R.id.confidentialityProject);
         supervisorProject = view.findViewById(R.id.supervisorProject);
+    }
 
+    /**
+     * Update TextView of the fragment
+     * @param project, our ProjectModel
+     */
+    private void updateViews(ProjectModel project){
         titleProject.setText(project.getProjectTitle());
 
         descriptionProject.setText(project.getProjectDescription());
 
         if(project.getConfidentiality() == 0){
-            confidProject.setText("Non confidentiel");
+            confidProject.setText(MSG_CONFID);
         }else{
-            confidProject.setText("Confidentiel !");
+            confidProject.setText(MSG_CONFIG_OK);
         }
 
         supervisorProject.setText(project.getSupervisor());
-
-        return view;
     }
+
+
 
 }
