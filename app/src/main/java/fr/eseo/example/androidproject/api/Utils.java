@@ -301,6 +301,25 @@ public class Utils {
         return "https://172.24.5.16/pfe/webservice.php?q=PORTE&user=" + username + "&token=" + token;
     }
 
+    /**
+     * Build the url of MYINF request
+     * @param username, user's username in String
+     * @return the url in String
+     */
+    public static String buildUrlForMYINF(String username){
+        return "https://172.24.5.16/pfe/webservice.php?q=MYINF&user="+username;
+    }
+
+    /**
+     * Build the url of LOGON request
+     * @param username, user's username in String
+     * @param password, user's password in String
+     * @return the url in String
+     */
+    public static String buildUrlForLOGON(String username, String password){
+        return "https://172.24.5.16/pfe/webservice.php?q=LOGON&user="+username+"&pass="+password;
+    }
+
 
 
 }
