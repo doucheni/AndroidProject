@@ -2,10 +2,7 @@ package fr.eseo.example.androidproject.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +13,8 @@ import android.widget.Toast;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
-import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.StudentsGroup;
-import fr.eseo.example.androidproject.room.entities.Project;
 
 /**
  * Class of the fragment ProjectsListCommFragment
@@ -34,6 +29,8 @@ public class ProjectsListCommFragment extends Fragment {
     private static final String MSG_POSTER_UNAVAILABLE = "Poster indisponible.";
     private static final String MSG_CONFID = "Confidentiel.";
     private static final String MSG_CONFID_OK = "Non confidentiel.";
+    private static final String MSG_ERROR_ADD = "Impossible d'ajouter le projet, verifiez sa confidentialité et/ou son poster.";
+    private static final String MSG_ERROR_DETAIL = "Vous ne pouvez pas voir le détail d'un projet confidentiel.";
 
     // Parameters name
     private static final String ARG_PROJECT = "project";
@@ -163,7 +160,7 @@ public class ProjectsListCommFragment extends Fragment {
             @Override
             public void onClick(View v){
                 if(project.getConfidentiality() != 0){
-                    Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(), MSG_ERROR_DETAIL, Toast.LENGTH_LONG).show();
                 }else{
                     startActivity(intent);
                 }
@@ -174,13 +171,21 @@ public class ProjectsListCommFragment extends Fragment {
     /**
      * Adding a OnClickListener for the checkbox
      * Update the list of project in ProjectCommActivity
+     * Verify if the project can be add to a pseudo jury (confidentiality ? Poster ?)
      */
     private void initCheckBoxOnClickListener(){
         checkBox.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if(checkBox.isChecked()){
-                    mainActivity.addProjectSelected(project);
+                    boolean correctProject = project.getProjectPoster() && project.getConfidentiality() == 0;
+                    if(correctProject){
+                        mainActivity.addProjectSelected(project);
+                    }else{
+                        Toast.makeText(getContext(), MSG_ERROR_ADD, Toast.LENGTH_LONG).show();
+                        checkBox.setChecked(false);
+                    }
+
                 }else{
                     mainActivity.removeProjectSelected(project);
                 }
