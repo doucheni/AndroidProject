@@ -3,137 +3,59 @@ package fr.eseo.example.androidproject.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
-
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
-
+import fr.eseo.example.androidproject.AsynchroneTasks.LogonAsyncTask;
+import fr.eseo.example.androidproject.AsynchroneTasks.UserStatusAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.PseudoJuryModel;
-import fr.eseo.example.androidproject.api.User;
 import fr.eseo.example.androidproject.api.Utils;
 
+/**
+ * Class for home activity
+ * In this activity the user can :
+ *  Log in as a professor or a communication member
+ *  have access to visitor activity if a communcation member has already created a pseudojury
+ */
 public class logon extends AppCompatActivity{
 
+    // Views from XML layout
     private Button login;
     private EditText username;
     private EditText password;
-    private String name;
-    private String pass;
-    private Context ctx;
-    private LoginRequest loginRequest;
-    private SSLSocketFactory sslSocket;
-
-    private Toast errorConnectionToast;
     private TextView linkVisitor;
+
+    /* Variables */
+    private String token;
+    private String usernameString;
+    private String passwordString;
+    private ProgressDialog progressDialog;
+    private Context ctx;
+    private SSLSocketFactory sslSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logon);
 
-        login = findViewById(R.id.activity_logon_btn);
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
-        login.setEnabled(false);
-        ctx = this.getApplicationContext();
-        username.addTextChangedListener(loginTextWatcher);
-        password.addTextChangedListener(loginTextWatcher);
-        linkVisitor = findViewById(R.id.link_visitor);
+        // Initialization of variables
+        this.initVariables();
 
-        sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
+        // Add onClickListener on login button
+        this.initLoginBTNAction();
 
-        errorConnectionToast = Toast.makeText(logon.this, "Erreur de connexion, vérifiez votre connexion à eduroam", Toast.LENGTH_SHORT);
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginRequest = new LoginRequest();
-                User user = new User(username.getText().toString(), password.getText().toString());
-
-                String urlRequestLogin = user.buildUrlForLogin();
-
-                try {
-                    InputStream resultStream = loginRequest.execute(urlRequestLogin).get();
-                    if( resultStream != null){
-                        JSONObject resultJSON = Utils.getJSONFromString(Utils.readStream(resultStream));
-                        if(Utils.getJSONValue(resultJSON, "result").equals("KO")){
-                            Toast.makeText(logon.this, "Identifiant ou mot de passe incorrect", Toast.LENGTH_LONG).show();
-                        }else{
-                            String token = Utils.getJSONValue(resultJSON, "token");
-                            user.setToken(token);
-                            String urlRequestStatus = user.buildUrlForStatus();
-                            InputStream resultStatus = new RequestForAPI().execute(urlRequestStatus,"GET").get();
-                            if(resultStatus != null){
-                                JSONObject jsonRole = Utils.getJSONFromString(Utils.readStream(resultStatus));
-                                JSONArray jsonValue = Utils.getJSONFromJSON(jsonRole,"info");
-                                Log.d("role", Utils.getJSONValue(jsonValue, "descr"));
-                                switch(Utils.getJSONValue(jsonValue, "descr")){
-                                    case "Service Communications" :
-                                        String username = Utils.getJSONValue(jsonValue,"username");
-                                        Intent intent = new Intent(ctx, ProjectCommActivity.class);
-                                        intent.putExtra("TOKEN", token);
-                                        intent.putExtra("USERNAME", username);
-
-                                        startActivity(intent);
-                                        break;
-
-                                    case "Professeur" :
-                                        String usernameJury = Utils.getJSONValue(jsonValue,"username");
-                                        Intent intentJury = new Intent(ctx, JuryActivity.class);
-                                        intentJury.putExtra("TOKEN",token);
-                                        intentJury.putExtra("USERNAME",usernameJury);
-                                        startActivity(intentJury);
-                                        break;
-                                }
-                            }
-
-                        }
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        linkVisitor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                PseudoJuryModel pseudoJuryModel = (PseudoJuryModel)intent.getSerializableExtra("pseudojury");
-                String usernameComm = intent.getStringExtra("username");
-                String tokenComm = intent.getStringExtra("token");
-                if(pseudoJuryModel == null){
-                    Toast.makeText(logon.this, "Demandez l'intervention d'un membre du service de communication", Toast.LENGTH_LONG).show();
-                }else{
-                    Intent intentVisitor = new Intent(ctx, VisitorActivity.class);
-                    intentVisitor.putExtra("pseudojury", pseudoJuryModel);
-                    intentVisitor.putExtra("username", usernameComm);
-                    intentVisitor.putExtra("token", tokenComm);
-                    startActivity(intentVisitor);
-                }
-            }
-        });
+        // Add onClickListener on visitor link
+        this.initLinkVisitorAction();
 
     }
 
@@ -158,96 +80,118 @@ public class logon extends AppCompatActivity{
         }
     };
 
-    class LoginRequest extends AsyncTask<String, Void, InputStream> {
+    /**
+     * Initialization of variables
+     */
+    private void initVariables(){
+        login = findViewById(R.id.activity_logon_btn);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        login.setEnabled(false);
+        ctx = this.getApplicationContext();
+        username.addTextChangedListener(loginTextWatcher);
+        password.addTextChangedListener(loginTextWatcher);
+        linkVisitor = findViewById(R.id.link_visitor);
+        sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
+    }
 
-        private ProgressDialog progress;
-        private static final String GET_METHOD = "GET";
-        private LoginRequest loginRequest;
-
-        @Override
-        protected void onPreExecute(){
-            progress = ProgressDialog.show(logon.this, "Chargement", "Juste un instant ...",true);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected InputStream doInBackground(String... params) {
-            String urlString = params[0];
-            InputStream result;
-            result = Utils.sendRequestWS(urlString, GET_METHOD, sslSocket);
-
-            if(result == null){
-                progress.dismiss();
-                errorConnectionToast.show();
+    /**
+     * Add a OnClickListener on login button
+     * Send a LOGON request to ESEO's API
+     */
+    private void initLoginBTNAction(){
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runLogonAsyncTask();
             }
+        });
+    }
 
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(InputStream result) {
-            progress.dismiss();
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected void onCancelled(){
-            super.onCancelled();
-        }
-
-        public InputStream sendRequestWS(String url, String requestMethod, SSLSocketFactory sslSocket){
-            InputStream responseStream = null;
-            try {
-                    // URL creation
-                    URL url_connection = new URL(url);
-                    // Configuration connection with SSLContext
-                    HttpsURLConnection connection = (HttpsURLConnection)url_connection.openConnection();
-                    connection.setSSLSocketFactory(sslSocket);
-                    connection.setReadTimeout(5000);
-                    connection.setRequestMethod(requestMethod);
-                    connection.setConnectTimeout(1000);
-                    connection.connect();
-                    if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
-                        return connection.getInputStream();
-                    }
-            } catch (IOException ioe){
-                return null;
+    /**
+     * Add a OnClickListener on visitor's link
+     * If there is a pseudojury, redirect the user to visitor's activity
+     * If there is no pseudojury, display a toast
+     */
+    private void initLinkVisitorAction(){
+        linkVisitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                PseudoJuryModel pseudoJuryModel = (PseudoJuryModel)intent.getSerializableExtra("pseudojury");
+                String usernameComm = intent.getStringExtra("username");
+                String tokenComm = intent.getStringExtra("token");
+                if(pseudoJuryModel == null){
+                    Toast.makeText(logon.this, "Demandez l'intervention d'un membre du service de communication", Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intentVisitor = new Intent(ctx, VisitorActivity.class);
+                    intentVisitor.putExtra("pseudojury", pseudoJuryModel);
+                    intentVisitor.putExtra("username", usernameComm);
+                    intentVisitor.putExtra("token", tokenComm);
+                    startActivity(intentVisitor);
+                }
             }
+        });
+    }
 
-            return null;
+    /**
+     * Send a LOGON request to ESEO's API with the username and password
+     */
+    private void runLogonAsyncTask(){
+        this.usernameString = username.getText().toString();
+        this.passwordString = password.getText().toString();
+        LogonAsyncTask logonAsyncTask = new LogonAsyncTask(this, this.sslSocket);
+        this.progressDialog = ProgressDialog.show(logon.this, "Connexion", "Veuillez patienter, connexion en cours ...");
+        logonAsyncTask.execute(Utils.buildUrlForLOGON(this.usernameString, this.passwordString), "GET");
+    }
+
+    /**
+     * Treat the result from LogonAsyncTask
+     * If result is OK, get the token and send a MYINF request
+     * If result is KO, display a toast
+     * @param jsonObject, the request's result
+     */
+    public void treatmentResultLOGON(JSONObject jsonObject){
+        if(Utils.getJSONValue(jsonObject, "result").equals("KO")){
+            Toast.makeText(logon.this, "Identifiant ou mot de passe incorrect", Toast.LENGTH_LONG).show();
+            this.progressDialog.dismiss();
+        }else{
+            this.token = Utils.getJSONValue(jsonObject, "token");
+            UserStatusAsyncTask userStatusAsyncTask = new UserStatusAsyncTask(this, this.sslSocket);
+            userStatusAsyncTask.execute(Utils.buildUrlForMYINF(this.usernameString), "GET");
         }
     }
 
-    class RequestForAPI extends AsyncTask<String, Void, InputStream>{
-        private ProgressDialog progress;
-        private LoginRequest loginRequest;
+    /**
+     * Treat the result from UserStatusAsyncTask
+     * Get user's status (Communication, Professeur)
+     * Redirect the user
+     * @param jsonObject, the request's result
+     */
+    public void treatmenResultMYINF(JSONObject jsonObject){
+        JSONArray jsonValue = Utils.getJSONFromJSON(jsonObject, "info");
+        this.progressDialog.dismiss();
+        switch(Utils.getJSONValue(jsonValue, "descr")){
+            case "Service Communications" :
+                String username = Utils.getJSONValue(jsonValue,"username");
+                Intent intent = new Intent(ctx, ProjectCommActivity.class);
+                intent.putExtra("TOKEN", token);
+                intent.putExtra("USERNAME", username);
 
-        @Override
-        protected void onPreExecute(){
-            progress = ProgressDialog.show(logon.this, "Chargement", "Juste un instant ...",true);
-            super.onPreExecute();
-        }
+                startActivity(intent);
+                break;
 
-        @Override
-        protected InputStream doInBackground(String... params) {
-            String urlString = params[0];
-            String method = params[1];
-            InputStream result;
-            result = Utils.sendRequestWS(urlString, method, sslSocket);
-
-            if(result == null){
-                progress.dismiss();
-                errorConnectionToast.show();
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(InputStream result) {
-            progress.dismiss();
-            super.onPostExecute(result);
+            case "Professeur" :
+                String usernameJury = Utils.getJSONValue(jsonValue,"username");
+                Intent intentJury = new Intent(ctx, JuryActivity.class);
+                intentJury.putExtra("TOKEN",token);
+                intentJury.putExtra("USERNAME",usernameJury);
+                startActivity(intentJury);
+                break;
         }
     }
+
+
+
 
 }

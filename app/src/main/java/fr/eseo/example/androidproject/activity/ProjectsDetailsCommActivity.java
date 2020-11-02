@@ -56,6 +56,8 @@ import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 public class ProjectsDetailsCommActivity extends AppCompatActivity {
 
     private static final int WRITE_REQUEST_CODE = 101;
+    private static final String MSG_NO_COMMENTS = "Aucun commentaire pour ce projet";
+    private static final String MSG_NO_MARKS = "Aucune note sur ce projet";
 
     // Intent's arguments
     private static final String ARG_PROJECT = "project";
@@ -307,49 +309,27 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
         // For each marks, adding a textView
         if(projectMarks.size() > 0){
             for(MarksVisitor mark : projectMarks){
-                final TextView markView = new TextView(getApplicationContext());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 20, 0, 0);
-                markView.setLayoutParams(params);
-                markView.setText(String.valueOf(mark.getMark()) + " / 20");
-                markView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-                Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-                markView.setTypeface(face);
-
+                final int markValue = mark.getMark();
                 // Adding the textview in the main thread
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try{
-                            marksContainer.addView(markView);
+                            marksContainer.addView(configureTextView(markValue + " / 20"));
                         }catch (Exception e){
                             e.printStackTrace();
                         }
                     }
                 });
-
             }
         }else{
             // If there is no marks, adding a default message
-            final TextView markView = new TextView(getApplicationContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(10, 20, 0, 0);
-            markView.setLayoutParams(params);
-            markView.setText("Aucune note sur ce projet");
-            markView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-            Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-            markView.setTypeface(face);
-
             // Adding the textview in the main thread
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try{
-                        marksContainer.addView(markView);
+                        marksContainer.addView(configureTextView(MSG_NO_MARKS));
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -366,23 +346,13 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
         // For each comments, adding a text view
         if(projectComments.size() > 0){
             for(CommentsVisitor comment : projectComments){
-                final TextView commentView = new TextView(getApplicationContext());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 20, 0, 0);
-                commentView.setLayoutParams(params);
-                commentView.setText(comment.getComment());
-                commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-                Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-                commentView.setTypeface(face);
-
+                final String commentValue = comment.getComment();
                 // Adding the textView in the main thread
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try{
-                            commentsContainer.addView(commentView);
+                            commentsContainer.addView(configureTextView(commentValue));
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -392,23 +362,12 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
             }
             // If there is no comments : adding a default message
         }else{
-            final TextView commentView = new TextView(getApplicationContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(10, 20, 0, 0);
-            commentView.setLayoutParams(params);
-            commentView.setText("Aucun commentaire pour ce projet");
-            commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-            Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-            commentView.setTypeface(face);
-
             // Adding the textView in the main thread
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try{
-                        commentsContainer.addView(commentView);
+                        commentsContainer.addView(configureTextView(MSG_NO_COMMENTS));
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -438,6 +397,26 @@ public class ProjectsDetailsCommActivity extends AppCompatActivity {
                 presentCommentsFromDB();
             }
         });
+    }
+
+    /**
+     * Configure a TextView
+     * @param content, the String content of the textView
+     * @return textView, the TextView configured with our content
+     */
+    private TextView configureTextView(String content){
+        final TextView textView = new TextView(getApplicationContext());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(10, 20, 0, 0);
+        textView.setLayoutParams(params);
+        textView.setText(content);
+        textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
+        Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
+        textView.setTypeface(face);
+
+        return textView;
     }
 }
 

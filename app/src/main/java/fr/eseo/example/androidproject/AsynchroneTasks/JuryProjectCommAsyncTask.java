@@ -20,36 +20,80 @@ import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 
+/**
+ * AsyncTask for ProjectsDetailsCommActivity
+ * Send a LIJUR request to ESEO's API
+ * Get the Jury of a specific project
+ */
 public class JuryProjectCommAsyncTask extends AsyncTask<String, Void, JuryModel> {
 
+    // Instance of ProjectsDetailsCommActivity
     ProjectsDetailsCommActivity projectsDetailsCommActivity;
+
+    // The project we want to find jury
     ProjectModel project;
+
+    // SSLSocket configuration (certificate)
     SSLSocketFactory sslSocketFactory;
 
+    /**
+     * Constructor of the class JuryProjectCommAsyncTask
+     * @param project, ProjectModel we want the jury
+     * @param sslSocketFactory, SSLSocketFactory configuration
+     * @param projectsDetailsCommActivity, instance of ProjectDetailsCommActivity
+     */
     public JuryProjectCommAsyncTask(ProjectModel project, SSLSocketFactory sslSocketFactory, ProjectsDetailsCommActivity projectsDetailsCommActivity){
         this.project = project;
         this.sslSocketFactory = sslSocketFactory;
         this.projectsDetailsCommActivity = projectsDetailsCommActivity;
     }
 
+    // Run before execution
     @Override
     protected void onPreExecute(){
 
     }
 
+    /**
+     * Execution, send a LIJUR request to ESEO's API
+     * Get an InputStream result
+     * Convert it into String format
+     * Convert it into JSONObject
+     * Build a JuryModel object with this JSONObject
+     * Return this JuryModel
+     * @param params, String url and String method (GET, POST, ...)
+     * @return jury, the project's jury
+     */
     @Override
     protected JuryModel doInBackground(String... params){
         JuryModel jury = null;
 
-        String urlRequest = params[0];
-        String method = params[1];
+        JSONObject resultFromStream = Utils.getJSONFromString(
+                Utils.readStream(
+                        Utils.sendRequestWS(params[0], params[1], this.sslSocketFactory)
+                )
+        );
+        return this.getJuryModelFromJSON(resultFromStream);
+    }
 
-        InputStream inputStream = Utils.sendRequestWS(urlRequest, method, this.sslSocketFactory);
-        JSONObject resultFromStream = Utils.getJSONFromString(Utils.readStream(inputStream));
+    /**
+     * Run after Execution
+     * Call ProjectsDetailsCommActivity.presentJury(JuryModel juryModel)
+     * To Display the JuryModel in a DialogFragment
+     * @param juryModel, JuryModel obtain from request
+     */
+    @Override
+    protected void onPostExecute(JuryModel juryModel){
+        this.projectsDetailsCommActivity.presentJury(juryModel);
+    }
 
-        Log.d("result", Utils.readStream(inputStream));
-
-
+    /**
+     * Build a JuryModel object from the JSONObject request's result
+     * @param resultFromStream the JSONObject from result's InputStream
+     * @return jury, the JuryModel of the project
+     */
+    private JuryModel getJuryModelFromJSON(JSONObject resultFromStream){
+        JuryModel jury = null;
         try {
             JSONArray jsonJuries = resultFromStream.getJSONArray("juries");
             for(int i = 0; i< jsonJuries.length(); i++){
@@ -79,12 +123,6 @@ public class JuryProjectCommAsyncTask extends AsyncTask<String, Void, JuryModel>
             e.printStackTrace();
         }
         return jury;
-    }
-
-    @Override
-    protected void onPostExecute(JuryModel juryModel){
-        //this.projectsDetailsCommActivity.updateActivityViews(juryModel);
-        this.projectsDetailsCommActivity.presentJury(juryModel);
     }
 
 

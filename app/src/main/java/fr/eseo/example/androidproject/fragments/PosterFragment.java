@@ -2,46 +2,40 @@ package fr.eseo.example.androidproject.fragments;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.os.Bundle;
-
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import fr.eseo.example.androidproject.AsynchroneTasks.PosterAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
-import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.Utils;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link PosterFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Class of the DialogFragment PosterFragment
+ * Display the project's poster in a DialogFragment
  */
 public class PosterFragment extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    // Parameters names
     private static final String ARG_PROJECT = "project";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
+    // Instance of PosterAsyncTask
     private PosterAsyncTask posterAsyncTask;
 
-    // TODO: Rename and change types of parameters
+    // Parameters
     private ProjectModel project;
     private String username;
     private String token;
 
+    // ProgressDialog to show a loading screen during poster's loading
     private ProgressDialog progressDialog;
 
+    // View from XML layout
     private ImageView posterImage;
 
     public PosterFragment() {
@@ -49,13 +43,13 @@ public class PosterFragment extends DialogFragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Create a new instance of PosterFragment
      *
-     * @param project Parameter 1.
+     * @param project, the project with the poster we want to show.
+     * @param username, the user's username.
+     * @param token, the user's token
      * @return A new instance of fragment posterFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PosterFragment newInstance(ProjectModel project, String username, String token) {
         PosterFragment fragment = new PosterFragment();
         Bundle args = new Bundle();
@@ -82,17 +76,31 @@ public class PosterFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_poster, container, false);
 
+        // Initialize ImageView
         posterImage = v.findViewById(R.id.poster_imageView);
 
-        posterAsyncTask = new PosterAsyncTask(this, Utils.configureSSLContext(v.getContext()).getSocketFactory());
-        String url = Utils.buildURLForPOSTR(username,token, project.getProjectId(),"FLB64");
-        this.progressDialog = ProgressDialog.show(v.getContext(),"Loading", "Please wait ...", true);
-        posterAsyncTask.execute(url, "GET");
+        this.runPosterAsynTask(v);
+
         return v;
     }
 
+    /**
+     * Treat the result from PosterAsyncTask
+     * Update the bitmap of the ImageView inside DialogFragment
+     * @param bitmap, the request's result
+     */
     public void treatmentResult(Bitmap bitmap){
         posterImage.setImageBitmap(bitmap);
         this.progressDialog.dismiss();
+    }
+
+    /**
+     * Send a POSTR request to ESEO's API to get the poster of a specific project
+     * PosterAsyncTask call PosterFragment.treatmentResult(Bitmap bitmap) after
+     */
+    private void runPosterAsynTask(View v){
+        posterAsyncTask = new PosterAsyncTask(this, Utils.configureSSLContext(v.getContext()).getSocketFactory());
+        this.progressDialog = ProgressDialog.show(v.getContext(),"Loading", "Please wait ...", true);
+        posterAsyncTask.execute(Utils.buildURLForPOSTR(username,token, project.getProjectId(),"FLB64"), "GET");
     }
 }

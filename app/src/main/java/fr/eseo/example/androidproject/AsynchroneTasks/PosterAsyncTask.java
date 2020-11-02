@@ -1,64 +1,61 @@
 package fr.eseo.example.androidproject.AsynchroneTasks;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
 import javax.net.ssl.SSLSocketFactory;
-
-import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
-import fr.eseo.example.androidproject.activity.VisitorActivity;
-import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.PosterFragment;
 
+/**
+ * AsyncTask for PosterFragment
+ * Send a POSTR request to ESEO's API
+ * Get a String IMG of the poster and return a Bitmap
+ */
 public class PosterAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
-
+    // Instance of PosterFragment
     private PosterFragment posterFragment;
+
+    // SSLSocket configuration (certificate)
     private SSLSocketFactory sslSocketFactory;
 
+    /**
+     * Constructor of class PosterAsyncTask
+     * @param posterFragment, instance of PosterFragment
+     * @param sslSocketFactory, the SSLSocketFactory configuration
+     */
     public PosterAsyncTask(PosterFragment posterFragment, SSLSocketFactory sslSocketFactory){
         //this.projectsDetailsCommActivity = commActivity;
         this.posterFragment = posterFragment;
         this.sslSocketFactory = sslSocketFactory;
     }
 
+    // Before Execution
     @Override
     protected void onPreExecute(){
 
     }
 
+    /**
+     * Execution, get a Bitmap from request's result
+     * @param params, String url and String method (GET, POST, ...)
+     * @return bitmap, our poster image in Bitmap format
+     */
     @Override
     protected Bitmap doInBackground(String... params){
-        Bitmap bitmap = null;
-
-        String result = Utils.getStringFromRequestWS(params[0], params[1], this.sslSocketFactory);
-
-        bitmap = Utils.decodeBase64ToBitmap(result);
-
-        return bitmap;
+        return Utils.decodeBase64ToBitmap(Utils.getStringFromRequestWS(params[0], params[1], this.sslSocketFactory));
     }
 
+    /**
+     * Run after execution
+     * Call treatmentResult from PosterFragment
+     * @param bitmap, the request's result in Bitmap format
+     */
     @Override
     protected void onPostExecute(Bitmap bitmap){
         if(this.posterFragment != null){
             this.posterFragment.treatmentResult(bitmap);
         }
     }
-
-
-
 
 }
