@@ -28,7 +28,6 @@ import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.JuryDetailsFragment;
-import fr.eseo.example.androidproject.room.entities.Jury;
 
 public class JuryDetailsActivity extends AppCompatActivity {
 

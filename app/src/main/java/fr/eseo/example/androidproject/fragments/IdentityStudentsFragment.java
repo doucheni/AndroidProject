@@ -54,7 +54,6 @@ public class IdentityStudentsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_identity_students, container, false);
 
         // Initialization TextViews
-        // Views from XML layout
         TextView surename = v.findViewById(R.id.studentSurName);
         TextView forename = v.findViewById(R.id.studentForeName);
 

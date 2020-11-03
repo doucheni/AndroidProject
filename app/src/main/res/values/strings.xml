@@ -44,13 +44,18 @@
     <string name="content_confidentiality_title">Confidentialité : </string>
     <string name="content_supervisor_title">Supervisor : </string>
 
-    <!-- FRAGMENT PROJECT CARD VISITOR -->
+    <!-- FRAGMENT PROJECT CARD VISITOR && ACTIVITY PROJECTS DETAILS JURY-->
     <string name="content_comment_title">Laisser un commentaire : </string>
     <string name="content_comment_input">Mon commentaire …</string>
     <string name="content_mark_title">Noter le project : </string>
     <string name="content_mark_input">20</string>
     <string name="content_mark_info"> / 20</string>
     <string name="content_button_send">Envoyer</string>
+
+
+    <!-- FRAGMENT VOTE STUDENT  -->
+    <string name="content_button_note">Noter </string>
+
 
 
 </resources>

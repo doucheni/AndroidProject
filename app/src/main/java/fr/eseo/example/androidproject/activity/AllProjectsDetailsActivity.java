@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -28,7 +27,6 @@ import java.util.List;
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.AsynchroneTasks.AllProjectsDetailsAsyncTask;
-import fr.eseo.example.androidproject.AsynchroneTasks.JuryProjectCommAsyncTask;
 import fr.eseo.example.androidproject.fragments.JuryProjectDetailsComm;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.JuryModel;

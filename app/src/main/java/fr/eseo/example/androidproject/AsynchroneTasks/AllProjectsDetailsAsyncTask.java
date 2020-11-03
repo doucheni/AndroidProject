@@ -8,14 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.SSLSocketFactory;
 
 import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
-import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.UserModel;

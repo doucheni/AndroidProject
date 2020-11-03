@@ -1,20 +1,16 @@
 package fr.eseo.example.androidproject.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import fr.eseo.example.androidproject.R;
-import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
 import fr.eseo.example.androidproject.activity.JuryProjectDetailsActivity;
-import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.StudentsGroup;
 
@@ -35,9 +31,6 @@ public class JuryDetailsFragment  extends Fragment {
     private String token;
     private StudentsGroup studentsGroup;
 
-    Context ctx;
-
-    private int idJury;
 
     public JuryDetailsFragment() {
         // Required empty public constructor
@@ -97,11 +90,8 @@ public class JuryDetailsFragment  extends Fragment {
             @Override
             public void onClick(View v){
 
-                if(project.getConfidentiality() != 0){
-                    Toast.makeText(v.getContext(), "You can't see the detail of a confidential project", Toast.LENGTH_LONG).show();
-                }else{
                     startActivity(intent);
-                }
+
             }
         });
         return v;

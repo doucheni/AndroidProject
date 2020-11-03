@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
 import fr.eseo.example.androidproject.activity.JuryProjectDetailsActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;

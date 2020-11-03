@@ -34,7 +34,9 @@
                 android:textSize="20sp"
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/colorWhiteText"
-                android:fontFamily="@font/roboto"/>
+                android:fontFamily="@font/roboto" />
+
+
 
 
         </LinearLayout>
@@ -72,6 +74,7 @@
                 android:textColor="@color/colorWhiteText"
                 android:fontFamily="@font/roboto"
                 android:layout_marginStart="20dp"/>
+
 
         </LinearLayout>
 

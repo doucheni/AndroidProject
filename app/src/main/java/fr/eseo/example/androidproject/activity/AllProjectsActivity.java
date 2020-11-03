@@ -3,7 +3,6 @@ package fr.eseo.example.androidproject.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.AllProjectsFragment;
-import fr.eseo.example.androidproject.room.EseoDatabase;
 import fr.eseo.example.androidproject.api.JuryModel;
 
 
@@ -43,7 +41,6 @@ public class AllProjectsActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String token;
     private String username;
-    private EseoDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){

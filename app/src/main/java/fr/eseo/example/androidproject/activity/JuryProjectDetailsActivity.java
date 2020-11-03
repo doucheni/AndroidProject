@@ -1,6 +1,5 @@
 package fr.eseo.example.androidproject.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,10 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,13 +35,12 @@ import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
-import fr.eseo.example.androidproject.fragments.IdentityStudentsFragment;
+import fr.eseo.example.androidproject.fragments.IdentityStudentsFragmentVote;
 import fr.eseo.example.androidproject.fragments.JuryProjectDetailFragment;
 import fr.eseo.example.androidproject.fragments.JuryProjectDetailsComm;
 import fr.eseo.example.androidproject.fragments.PosterFragment;
 import fr.eseo.example.androidproject.room.EseoDatabase;
 import fr.eseo.example.androidproject.room.entities.MarksJury;
-import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 
 public class JuryProjectDetailsActivity extends AppCompatActivity {
 
@@ -75,6 +71,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
     // Views from XML layout
     private Button buttonPoster;
     private Button buttonMore;
+    private Button buttonStudents;
     private LinearLayout marksResults;
 
     // List from database
@@ -96,6 +93,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
         // Add onClickListener to buttonMore
         this.initBtnMoreAction();
 
+
         // Create a ProjectDetailFragment
         this.createProjectDetailFragment();
 
@@ -105,8 +103,6 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
 
         // Get and present marks from database
         this.updateMarks();
-
-
     }
 
     /**
@@ -119,6 +115,9 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         dialogJury.show(ft, "jury");
     }
+
+
+
 
     /**
      * Create a file with the given title and call startActivityForResult to write in it
@@ -192,7 +191,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
 
 
     /**
-     * Initialization of each variables from AllProjectsDetailsActivity class
+     * Initialization of each variables from JuryProjectDetailsActivity class
      */
     private void initVariables(){
 
@@ -246,6 +245,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Create a ProjectDetailFragment
      * Wich present main information of a given project.
@@ -263,7 +263,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
     private void createStudentsIdentityFragments(){
         for(UserModel user : studentsGroup.getMembers()){
             FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-            Fragment fragment2 = IdentityStudentsFragment.newInstance(user);
+            Fragment fragment2 = IdentityStudentsFragmentVote.newInstance(project,user);
             ft2.add(R.id.student_container, fragment2, "student");
             ft2.commit();
         }
@@ -328,8 +328,6 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
             });
         }
     }
-
-
 
 
     /**

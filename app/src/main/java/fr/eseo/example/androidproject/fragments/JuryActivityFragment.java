@@ -9,15 +9,11 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.JuryDetailsActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
-import fr.eseo.example.androidproject.api.User;
 
 import fr.eseo.example.androidproject.api.UserModel;
 

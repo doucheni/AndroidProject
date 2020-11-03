@@ -15,14 +15,11 @@ import androidx.fragment.app.Fragment;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.room.EseoDatabase;
-import fr.eseo.example.androidproject.room.entities.CommentsVisitor;
 import fr.eseo.example.androidproject.room.entities.MarksJury;
-import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 
 public class JuryProjectDetailFragment extends Fragment {
 
     private static final String ARG_PROJECT = "project";
-    private static final String ARG_JURY = "jury";
 
 
     private ProjectModel project;
@@ -46,7 +43,7 @@ public class JuryProjectDetailFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param project Parameter 1.
-     * @return A new instance of fragment ProjectDetailFragment.
+     * @return A new instance of fragment JuryProjectDetailFragment.
      */
     public static JuryProjectDetailFragment newInstance(ProjectModel project) {
         JuryProjectDetailFragment fragment = new JuryProjectDetailFragment();
@@ -117,7 +114,7 @@ public class JuryProjectDetailFragment extends Fragment {
                             }
                         });
                     }
-                    Toast.makeText(v.getContext(), "Merci de nous avoir donné votre avis !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(), "Votre note a bien été enregistrée", Toast.LENGTH_LONG).show();
                     projectMarkET.setText("");
 
             }

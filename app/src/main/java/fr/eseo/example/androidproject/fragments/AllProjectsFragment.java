@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,8 @@ import android.widget.Toast;
 
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
-import fr.eseo.example.androidproject.activity.ProjectCommActivity;
-import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
-import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
 import fr.eseo.example.androidproject.api.StudentsGroup;
-import fr.eseo.example.androidproject.room.entities.Project;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +48,8 @@ public class AllProjectsFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param project Parameter 1.
-     * @return A new instance of fragment ProjectsDetailsCommFragment.
+     *@param studentsGroup and the username and token of the user wich is connected
+     * @return A new instance of fragment AllProjectsFragment.
      */
     public static AllProjectsFragment newInstance(ProjectModel project,StudentsGroup studentsGroup, String username, String token) {
         AllProjectsFragment fragment = new AllProjectsFragment();

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.IdentityStudentsFragment"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/studentForeName"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/studentSurName"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/colorWhiteText"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/content_mark_input"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:id="@+id/student_mark"
+        android:fontFamily="@font/roboto"
+        android:textColorHint="@color/colorWhiteText"
+        android:textColor="@color/colorWhiteText"
+        android:inputType="number"
+        android:background="@drawable/background_deepmoreblue"
+        android:autofillHints="@string/content_mark_input"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/content_mark_info"
+        android:textSize="15sp"
+        android:textColor="@color/colorWhiteText"
+        android:fontFamily="@font/roboto"/>
+
+
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/content_button_send"
+        android:textSize="15sp"
+        android:id="@+id/btn_send_data"
+        android:textColor="@color/colorWhiteText"
+        android:fontFamily="@font/roboto"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:fontFamily="@font/roboto"
+        android:orientation="horizontal"
+        android:id="@+id/student_note">
+    </LinearLayout>
+
+    </LinearLayout>
