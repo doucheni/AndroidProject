@@ -171,6 +171,9 @@ public class ProjectCardVisitor extends Fragment {
                             }
                         });
                     }
+                    Toast.makeText(v.getContext(), "Merci de nous avoir donné votre avis !", Toast.LENGTH_LONG).show();
+                    projectCommentET.setText("");
+                    projectMarkET.setText("");
                 }
             }
         });

@@ -1,11 +1,11 @@
 package fr.eseo.example.androidproject.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -44,15 +44,10 @@ import fr.eseo.example.androidproject.fragments.PseudoJuryProjectsComm;
  */
 public class ProjectCommActivity extends AppCompatActivity {
 
+    private static final String MSG_ERROR_RESULT = "Projets et/ou juries indisponibles.";
+
     // SSLSocketFactory configured with certificate
     public SSLSocketFactory sslSocketFactory;
-
-    // Toasts for error
-    public Toast errorRequestToast;
-    private Toast errorResultToast;
-
-    // Instance of CommAsyncTask for LIPRJ request
-    private CommAsyncTask commAsyncTask;
 
     // Loading ProgressDialog during request
     private ProgressDialog progressDialog;
@@ -101,7 +96,7 @@ public class ProjectCommActivity extends AppCompatActivity {
         HashMap<Integer, StudentsGroup> groups = new HashMap<>();
         try{
             if(jsonObject.get("result").equals("KO")){
-                errorResultToast.show();
+                Toast.makeText(ProjectCommActivity.this, MSG_ERROR_RESULT, Toast.LENGTH_LONG).show();
             }else{
                 JSONArray jsonProjects = jsonObject.getJSONArray("projects");
                 for(int i = 0; i < jsonProjects.length(); i++){
@@ -160,9 +155,7 @@ public class ProjectCommActivity extends AppCompatActivity {
      * @param project the project to remove
      */
     public void removeProjectSelected(ProjectModel project){
-        if(this.projectsSelected.contains(project)){
-            this.projectsSelected.remove(project);
-        }
+        this.projectsSelected.remove(project);
     }
 
     /**
@@ -234,6 +227,16 @@ public class ProjectCommActivity extends AppCompatActivity {
                     Fragment fragment = PseudoJuryProjectsComm.newInstance(pseudoJuryModel, username, token);
                     ft.add(R.id.pseudojury_container_main, fragment, "pseudojury-" + (pseudoJuryModelList.size() - 1));
                     ft.commit();
+
+                    LinearLayout layout = findViewById(R.id.project_container);
+                    for(int i = 0; i < layout.getChildCount(); i++){
+                        LinearLayout project_container = (LinearLayout)layout.getChildAt(i);
+                        CheckBox checkBox = (CheckBox)project_container.getChildAt(0);
+                        checkBox.setChecked(false);
+                    }
+
+                    projectsSelected = new ArrayList<>();
+                    Toast.makeText(ProjectCommActivity.this, "Le pseudo jury a bien été enregistré.", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(ProjectCommActivity.this, "Vous devez selectionner au moins un projet", Toast.LENGTH_LONG).show();
                 }
@@ -271,10 +274,6 @@ public class ProjectCommActivity extends AppCompatActivity {
         // Configuration of the sslSocket
         sslSocketFactory = Utils.configureSSLContext(getApplicationContext()).getSocketFactory();
 
-        // Toast's initialization
-        errorRequestToast = Toast.makeText(ProjectCommActivity.this, "Error during the request", Toast.LENGTH_LONG);
-        errorResultToast = Toast.makeText(ProjectCommActivity.this, "Projects/Jury are not available", Toast.LENGTH_LONG);
-
         // Views initialization
         pseudoJuryContainer = findViewById(R.id.pseudojury_container_main);
         btnNewPJ = findViewById(R.id.btn_newPJ);
@@ -286,7 +285,7 @@ public class ProjectCommActivity extends AppCompatActivity {
      */
     private void runCommAsynTask(){
         // Init CommAsyncTask
-        this.commAsyncTask = new CommAsyncTask(this, this.sslSocketFactory);
+        CommAsyncTask commAsyncTask = new CommAsyncTask(this, this.sslSocketFactory);
 
         // Showing the ProgressDialog Loading
         this.progressDialog = ProgressDialog.show(ProjectCommActivity.this,"Loading", "Please wait ...", true);
