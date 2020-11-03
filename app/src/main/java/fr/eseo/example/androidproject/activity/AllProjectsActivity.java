@@ -24,6 +24,8 @@ import javax.net.ssl.SSLSocketFactory;
 import fr.eseo.example.androidproject.AsynchroneTasks.AllProjectsAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
+import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.AllProjectsFragment;
 import fr.eseo.example.androidproject.room.EseoDatabase;
@@ -63,6 +65,8 @@ public class AllProjectsActivity extends AppCompatActivity {
     public void treatmentResult(JSONObject jsonObject){
         List<ProjectModel> projects = new ArrayList<>();
         HashMap<Integer, JuryModel> membersJury = new HashMap<>();
+        HashMap<Integer, StudentsGroup> groups = new HashMap<>();
+
         try{
             if(jsonObject.get("result").equals("KO")){
                 errorResultToast.show();
@@ -78,11 +82,25 @@ public class AllProjectsActivity extends AppCompatActivity {
                     JSONObject jsonSupervisor = jsonProject.getJSONObject("supervisor");
                     String project_supervisor = jsonSupervisor.getString("forename") + " " + jsonSupervisor.getString("surname");
                     projects.add(new ProjectModel(project_id, project_title, project_description, project_poster, project_confid, project_supervisor));
+                    JSONArray jsonStudents = jsonProject.getJSONArray("students");
+                    List<UserModel> studentsMember = new ArrayList<>();
+
+                    for(int j = 0; j < jsonStudents.length(); j++){
+                        JSONObject jsonStudent = jsonStudents.getJSONObject(j);
+                        int userId = jsonStudent.getInt("userId");
+                        String user_forename = jsonStudent.getString("forename");
+                        String user_surname = jsonStudent.getString("surname");
+                        studentsMember.add(new UserModel(userId, user_forename, user_surname));
+                    }
+                    StudentsGroup studentsGroup = new StudentsGroup(project_id, studentsMember);
+                    groups.put(project_id, studentsGroup);
+
                 }
+
 
                 for(int i = 0; i < projects.size(); i++){
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    Fragment fragment = AllProjectsFragment.newInstance(projects.get(i), this.username, this.token);
+                    Fragment fragment = AllProjectsFragment.newInstance(projects.get(i),groups.get(projects.get(i).getProjectId()), this.username, this.token);
                     ft.add(R.id.project_container,fragment, "project-"+i);
                     ft.commit();
                 }

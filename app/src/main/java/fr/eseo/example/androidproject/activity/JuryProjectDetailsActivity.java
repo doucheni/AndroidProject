@@ -1,5 +1,19 @@
 package fr.eseo.example.androidproject.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,28 +22,16 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
+
 import javax.net.ssl.SSLSocketFactory;
 
-import fr.eseo.example.androidproject.AsynchroneTasks.AllProjectsDetailsAsyncTask;
-import fr.eseo.example.androidproject.AsynchroneTasks.JuryProjectCommAsyncTask;
-import fr.eseo.example.androidproject.fragments.JuryProjectDetailsComm;
+import fr.eseo.example.androidproject.AsynchroneTasks.JuryProjectsDetailsAsyncTask;
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
@@ -37,25 +39,14 @@ import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.api.UserModel;
 import fr.eseo.example.androidproject.api.Utils;
 import fr.eseo.example.androidproject.fragments.IdentityStudentsFragment;
+import fr.eseo.example.androidproject.fragments.JuryProjectDetailFragment;
+import fr.eseo.example.androidproject.fragments.JuryProjectDetailsComm;
 import fr.eseo.example.androidproject.fragments.PosterFragment;
-import fr.eseo.example.androidproject.fragments.ProjectDetailFragment;
 import fr.eseo.example.androidproject.room.EseoDatabase;
-import fr.eseo.example.androidproject.room.entities.CommentsVisitor;
+import fr.eseo.example.androidproject.room.entities.MarksJury;
 import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 
-/**
- * Class for the activity AllProjectsDetailsActivity
- * Second activity for a Service communication member
- * In this activity, the user can :
- *  See more details about a specific project (title, description, supervisor)
- *  See the project's poster
- *  See the project's students
- *  See the project's jury
- *  See the visitor's marks
- *  See the visitor's comments
- *  Export the visitor's data
- */
-public class AllProjectsDetailsActivity extends AppCompatActivity {
+public class JuryProjectDetailsActivity extends AppCompatActivity {
 
     private static final int WRITE_REQUEST_CODE = 101;
 
@@ -65,11 +56,12 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
 
-    // Instance of AllProjectsDetailsAsyncTask
-    AllProjectsDetailsAsyncTask allProjectsDetailsAsyncTask;
+    // Instance of JuryProjectsDetailsAsyncTask
+    JuryProjectsDetailsAsyncTask juryProjectsDetailsAsyncTask;
 
-    // instance of ProjectsDetailsCommActivity
-    AllProjectsDetailsActivity instance;
+    // instance of JuryProjectDetailsActivity
+    JuryProjectDetailsActivity instance;
+
 
     // SSLSocketFactory configuration
     private SSLSocketFactory sslSocketFactory;
@@ -83,18 +75,17 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
     // Views from XML layout
     private Button buttonPoster;
     private Button buttonMore;
-    private Button buttonExport;
-    private LinearLayout marksContainer;
-    private LinearLayout commentsContainer;
+    private LinearLayout marksResults;
 
     // List from database
-    private List<MarksVisitor> projectMarks;
-    private List<CommentsVisitor> projectComments;
+    private List<MarksJury> projectMarks;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_projects_details_comm);
+        setContentView(R.layout.activity_projects_details_jury);
 
         // Initialization of variables
         this.initVariables();
@@ -111,11 +102,10 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         // Create Several StudentIdentityFragments
         this.createStudentsIdentityFragments();
 
-        // Get and present marks and comments from database
-        this.updateMarksAndComments();
 
-        // Add onClickListener to buttonExport
-        this.initBtnExportAction();
+        // Get and present marks from database
+        this.updateMarks();
+
 
     }
 
@@ -166,17 +156,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
             }
         }
 
-        if(projectComments.size() > 0){
-            content += "Commentaire(s) : ";
-        }
 
-        for(int j = 0; j < projectComments.size(); j++) {
-            if (j < projectComments.size() - 1) {
-                content += projectComments.get(j).getComment() + "; ";
-            } else {
-                content += projectComments.get(j).getComment();
-            }
-        }
 
         if(requestCode == WRITE_REQUEST_CODE){
             switch (resultCode){
@@ -190,6 +170,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
 
     /**
      * Write in a file a given content
@@ -209,10 +190,12 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Initialization of each variables from AllProjectsDetailsActivity class
      */
     private void initVariables(){
+
         Intent intent = getIntent();
         token = intent.getStringExtra(ARG_TOKEN);
         project = (ProjectModel) intent.getSerializableExtra(ARG_PROJECT);
@@ -222,13 +205,15 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         instance = this;
         buttonPoster = findViewById(R.id.button_poster);
         buttonMore = findViewById(R.id.button_details);
-        marksContainer = findViewById(R.id.marks_container);
-        commentsContainer = findViewById(R.id.comments_container);
-        buttonExport = findViewById(R.id.btn_export);
+        marksResults = findViewById(R.id.marksResult_container);
+
+
         if(!project.getProjectPoster()){
             buttonPoster.setEnabled(false);
         }
     }
+
+
 
     /**
      * Adding a OnClickListener for buttonPoster
@@ -255,25 +240,8 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         buttonMore.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                allProjectsDetailsAsyncTask = new AllProjectsDetailsAsyncTask(project, sslSocketFactory, instance);
-                allProjectsDetailsAsyncTask.execute(Utils.buildUrlForLIJUR(username, token), "GET");
-            }
-        });
-    }
-
-    /**
-     * Adding a OnClickListener for buttonExport
-     * Create a file where marks and comments are write
-     */
-    private void initBtnExportAction(){
-        buttonExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(projectMarks.size() > 0 | projectComments.size() > 0){
-                    createFile("Project_"+project.getProjectId()+"_Review");
-                }else{
-                    Toast.makeText(getApplicationContext(), "Impossible d'exporter lorsqu'il n'y a pas de données", Toast.LENGTH_LONG);
-                }
+                juryProjectsDetailsAsyncTask = new JuryProjectsDetailsAsyncTask(project, sslSocketFactory, instance);
+                juryProjectsDetailsAsyncTask.execute(Utils.buildUrlForLIJUR(username, token), "GET");
             }
         });
     }
@@ -284,7 +252,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
      */
     private void createProjectDetailFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = ProjectDetailFragment.newInstance(project);
+        Fragment fragment = JuryProjectDetailFragment.newInstance(project);
         ft.add(R.id.project_detail_container,fragment, "project");
         ft.commit();
     }
@@ -301,6 +269,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Create a TextView for each MarkVisitor find in the database
      * If there is no marks, display a default message
@@ -308,7 +277,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
     private void presentMarksFromDB(){
         // For each marks, adding a textView
         if(projectMarks.size() > 0){
-            for(MarksVisitor mark : projectMarks){
+            for(MarksJury mark : projectMarks){
                 final TextView markView = new TextView(getApplicationContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -325,7 +294,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            marksContainer.addView(markView);
+                            marksResults.addView(markView);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -351,7 +320,7 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try{
-                        marksContainer.addView(markView);
+                        marksResults.addView(markView);
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -360,86 +329,28 @@ public class AllProjectsDetailsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Create a TextView for each CommentVisitor find in the database
-     * If there is no comments, display a default message
-     */
-    private void presentCommentsFromDB(){
-        // For each comments, adding a text view
-        if(projectComments.size() > 0){
-            for(CommentsVisitor comment : projectComments){
-                final TextView commentView = new TextView(getApplicationContext());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(10, 20, 0, 0);
-                commentView.setLayoutParams(params);
-                commentView.setText(comment.getComment());
-                commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-                Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-                commentView.setTypeface(face);
 
-                // Adding the textView in the main thread
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            commentsContainer.addView(commentView);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
 
-            }
-            // If there is no comments : adding a default message
-        }else{
-            final TextView commentView = new TextView(getApplicationContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(10, 20, 0, 0);
-            commentView.setLayoutParams(params);
-            commentView.setText("Aucun commentaire pour ce projet");
-            commentView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
-            Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
-            commentView.setTypeface(face);
-
-            // Adding the textView in the main thread
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        commentsContainer.addView(commentView);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
 
     /**
-     * Get MarkVisitor and CommentVisitor from database
-     * Stock values in list of MarkVisitor and list of CommentVisitor
+     * Get Jury Marks and  from database
+     * Stock values in list of MarkJury
      * Call presentMarksFromDB() and presentCommentsFromDB()
      */
-    private void updateMarksAndComments(){
+       private void updateMarks(){
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
 
                 // Get comments and marks from database
-                projectMarks = EseoDatabase.getDatabase(getApplicationContext()).marksVisitorDAO().getMarks(project.getProjectId());
-                projectComments = EseoDatabase.getDatabase(getApplicationContext()).commentsVisitorDAO().getComments(project.getProjectId());
+                projectMarks = EseoDatabase.getDatabase(getApplicationContext()).marksJuryDAO().getMarks(project.getProjectId());
 
                 // Create TextView for each marks
                 presentMarksFromDB();
 
-                // Create TextView for each comments
-                presentCommentsFromDB();
+
             }
         });
     }
-}
 
+}

@@ -13,8 +13,10 @@ import androidx.fragment.app.Fragment;
 
 import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.AllProjectsDetailsActivity;
+import fr.eseo.example.androidproject.activity.JuryProjectDetailsActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
 
 public class JuryDetailsFragment  extends Fragment {
 
@@ -22,6 +24,8 @@ public class JuryDetailsFragment  extends Fragment {
     private static final String ARG_PROJECT = "project";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
+    private static final String ARG_STUDENTS = "students";
+
     private TextView textTitle;
     private TextView posterIndicator;
     private TextView confidentialityIndicator;
@@ -29,6 +33,8 @@ public class JuryDetailsFragment  extends Fragment {
     private Intent intent;
     private String username;
     private String token;
+    private StudentsGroup studentsGroup;
+
     Context ctx;
 
     private int idJury;
@@ -36,10 +42,11 @@ public class JuryDetailsFragment  extends Fragment {
     public JuryDetailsFragment() {
         // Required empty public constructor
     }
-    public static JuryDetailsFragment newInstance(ProjectModel project,String username, String token) {
+    public static JuryDetailsFragment newInstance(ProjectModel project, StudentsGroup studentsGroup, String username, String token) {
         JuryDetailsFragment fragment = new JuryDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_JURY, project);
+        args.putSerializable(ARG_STUDENTS, studentsGroup);
         args.putString(ARG_USERNAME, username);
         args.putString(ARG_TOKEN, token);
         fragment.setArguments(args);
@@ -52,6 +59,8 @@ public class JuryDetailsFragment  extends Fragment {
             project = (ProjectModel) getArguments().getSerializable(ARG_JURY);
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
+            studentsGroup = (StudentsGroup)getArguments().getSerializable(ARG_STUDENTS);
+
         }
     }
 
@@ -78,10 +87,12 @@ public class JuryDetailsFragment  extends Fragment {
             confidentialityIndicator.setText("Not confidential");
         }
 
-        intent = new Intent(getActivity(), AllProjectsDetailsActivity.class);
+        intent = new Intent(getActivity(), JuryProjectDetailsActivity.class);
         intent.putExtra(ARG_PROJECT, project);
         intent.putExtra(ARG_USERNAME,username);
         intent.putExtra(ARG_TOKEN, token);
+        intent.putExtra(ARG_STUDENTS, studentsGroup);
+
         v.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

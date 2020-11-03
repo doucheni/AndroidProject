@@ -18,6 +18,7 @@ import fr.eseo.example.androidproject.activity.ProjectCommActivity;
 import fr.eseo.example.androidproject.activity.ProjectsDetailsCommActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.ProjectModel;
+import fr.eseo.example.androidproject.api.StudentsGroup;
 import fr.eseo.example.androidproject.room.entities.Project;
 
 /**
@@ -30,8 +31,12 @@ public class AllProjectsFragment extends Fragment {
     private static final String ARG_PROJECT = "project";
     private static final String ARG_USERNAME = "username";
     private static final String ARG_TOKEN = "token";
+    private static final String ARG_STUDENTS = "students";
+
 
     private ProjectModel project;
+    private StudentsGroup studentsGroup;
+
     private TextView textTitle;
     private TextView posterIndicator;
     private TextView confidentialityIndicator;
@@ -50,12 +55,14 @@ public class AllProjectsFragment extends Fragment {
      * @param project Parameter 1.
      * @return A new instance of fragment ProjectsDetailsCommFragment.
      */
-    public static AllProjectsFragment newInstance(ProjectModel project, String username, String token) {
+    public static AllProjectsFragment newInstance(ProjectModel project,StudentsGroup studentsGroup, String username, String token) {
         AllProjectsFragment fragment = new AllProjectsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PROJECT, project);
         args.putString(ARG_USERNAME, username);
         args.putString(ARG_TOKEN, token);
+        args.putSerializable(ARG_STUDENTS, studentsGroup);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,6 +74,8 @@ public class AllProjectsFragment extends Fragment {
             project = (ProjectModel) getArguments().getSerializable(ARG_PROJECT);
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
+            studentsGroup = (StudentsGroup)getArguments().getSerializable(ARG_STUDENTS);
+
         }
     }
 
@@ -98,6 +107,8 @@ public class AllProjectsFragment extends Fragment {
         intent.putExtra(ARG_PROJECT, project);
         intent.putExtra(ARG_USERNAME,username);
         intent.putExtra(ARG_TOKEN, token);
+        intent.putExtra(ARG_STUDENTS, studentsGroup);
+
         v.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

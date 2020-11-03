@@ -18,6 +18,7 @@ import fr.eseo.example.androidproject.R;
 import fr.eseo.example.androidproject.activity.JuryDetailsActivity;
 import fr.eseo.example.androidproject.api.JuryModel;
 import fr.eseo.example.androidproject.api.User;
+
 import fr.eseo.example.androidproject.api.UserModel;
 
 
@@ -58,6 +59,7 @@ public class JuryActivityFragment extends Fragment {
             username = getArguments().getString(ARG_USERNAME);
             token = getArguments().getString(ARG_TOKEN);
         }
+
     }
 
     @Override

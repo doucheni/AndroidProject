@@ -21,6 +21,7 @@
         <activity android:name=".activity.ProjectsDetailsCommActivity" />
         <activity android:name=".activity.AllProjectsActivity"/>
         <activity android:name=".activity.AllProjectsDetailsActivity"/>
+        <activity android:name=".activity.JuryProjectDetailsActivity"/>
         <activity android:name=".activity.logon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
