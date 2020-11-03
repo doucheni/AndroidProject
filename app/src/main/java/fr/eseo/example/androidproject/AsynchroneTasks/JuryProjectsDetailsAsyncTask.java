@@ -21,9 +21,9 @@ import fr.eseo.example.androidproject.api.Utils;
 
 public class JuryProjectsDetailsAsyncTask extends AsyncTask<String, Void, JuryModel> {
 
-    JuryProjectDetailsActivity juryProjectDetailsActivity;
-    ProjectModel project;
-    SSLSocketFactory sslSocketFactory;
+    final JuryProjectDetailsActivity juryProjectDetailsActivity;
+    final ProjectModel project;
+    final SSLSocketFactory sslSocketFactory;
 
 
     public JuryProjectsDetailsAsyncTask(ProjectModel project, SSLSocketFactory sslSocketFactory, JuryProjectDetailsActivity juryProjectDetailsActivity){

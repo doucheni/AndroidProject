@@ -13,7 +13,7 @@ import fr.eseo.example.androidproject.api.Utils;
 public class CommAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     // Instance of ProjectCommActivity
-    private ProjectCommActivity commActivity;
+    private final ProjectCommActivity commActivity;
 
     // SSLSocket configuration (certificate)
     private SSLSocketFactory sslSocketFactory;

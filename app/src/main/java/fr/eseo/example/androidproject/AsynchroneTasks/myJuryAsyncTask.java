@@ -1,9 +1,7 @@
 package fr.eseo.example.androidproject.AsynchroneTasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -29,7 +27,7 @@ public class myJuryAsyncTask extends AsyncTask<String, Void, JSONObject> {
     }
     @Override
     protected JSONObject doInBackground(String... params) {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         String urlString = params[0];
         String method = params[1];
 

@@ -7,7 +7,6 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import fr.eseo.example.androidproject.room.entities.MarksJury;
 import fr.eseo.example.androidproject.room.entities.MarksStudents;
 
 @Dao

@@ -22,9 +22,7 @@ public class JuryDetailsFragment  extends Fragment {
     private static final String ARG_TOKEN = "token";
     private static final String ARG_STUDENTS = "students";
 
-    private TextView textTitle;
-    private TextView posterIndicator;
-    private TextView confidentialityIndicator;
+
     private ProjectModel project;
     private Intent intent;
     private String username;
@@ -62,9 +60,9 @@ public class JuryDetailsFragment  extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_jury_details_project, container, false);
 
-        textTitle = v.findViewById(R.id.projectTitle);
+        TextView textTitle = v.findViewById(R.id.projectTitle);
         textTitle.setText(project.getProjectTitle());
-        posterIndicator = v.findViewById(R.id.posterBoolean);
+        TextView posterIndicator = v.findViewById(R.id.posterBoolean);
 
         if(project.getProjectPoster()){
             posterIndicator.setText("poster available");
@@ -72,7 +70,7 @@ public class JuryDetailsFragment  extends Fragment {
             posterIndicator.setText("No poster available");
         }
 
-        confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
+        TextView confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
 
         if(project.getConfidentiality() != 0){
             confidentialityIndicator.setText("Confidential project");

@@ -32,9 +32,6 @@ public class AllProjectsFragment extends Fragment {
     private ProjectModel project;
     private StudentsGroup studentsGroup;
 
-    private TextView textTitle;
-    private TextView posterIndicator;
-    private TextView confidentialityIndicator;
     private String username;
     private String token;
     private Intent intent;
@@ -80,10 +77,10 @@ public class AllProjectsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_all_projects, container, false);
 
-        textTitle = v.findViewById(R.id.projectTitle);
+        TextView textTitle = v.findViewById(R.id.projectTitle);
         textTitle.setText(project.getProjectTitle());
 
-        posterIndicator = v.findViewById(R.id.posterBoolean);
+        TextView posterIndicator = v.findViewById(R.id.posterBoolean);
 
         if(project.getProjectPoster()){
             posterIndicator.setText("poster available");
@@ -91,7 +88,7 @@ public class AllProjectsFragment extends Fragment {
             posterIndicator.setText("No poster available");
         }
 
-        confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
+        TextView confidentialityIndicator = v.findViewById(R.id.confidentialityIndicator);
 
         if(project.getConfidentiality() != 0){
             confidentialityIndicator.setText("Confidential project");

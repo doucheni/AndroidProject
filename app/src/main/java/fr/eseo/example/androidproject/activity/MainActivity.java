@@ -2,9 +2,7 @@ package fr.eseo.example.androidproject.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.widget.Button;
 
 import fr.eseo.example.androidproject.R;
 

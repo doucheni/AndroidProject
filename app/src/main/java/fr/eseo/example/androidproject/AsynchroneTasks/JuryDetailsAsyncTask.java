@@ -13,8 +13,8 @@ import fr.eseo.example.androidproject.api.Utils;
 
 public class JuryDetailsAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
-    private JuryDetailsActivity juryDetailsActivity;
-    private SSLSocketFactory sslSocketFactory;
+    private final JuryDetailsActivity juryDetailsActivity;
+    private final SSLSocketFactory sslSocketFactory;
 
     public JuryDetailsAsyncTask(JuryDetailsActivity juryDetailsActivity, SSLSocketFactory sslSocketFactory){
         this.juryDetailsActivity = juryDetailsActivity;
@@ -29,7 +29,7 @@ public class JuryDetailsAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected JSONObject doInBackground(String... params) {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         String urlString = params[0];
         String method = params[1];
 

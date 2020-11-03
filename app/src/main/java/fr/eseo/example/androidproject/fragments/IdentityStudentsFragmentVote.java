@@ -1,6 +1,5 @@
 package fr.eseo.example.androidproject.fragments;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -143,7 +142,7 @@ public class IdentityStudentsFragmentVote extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(10, 20, 0, 0);
                 markView.setLayoutParams(params);
-                markView.setText(String.valueOf(mark.getMark()) + " / 20");
+                markView.setText(mark.getMark() + " / 20");
                 markView.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorWhiteText));
                 Typeface face = ResourcesCompat.getFont(view.getContext(), R.font.roboto);
                 markView.setTypeface(face);

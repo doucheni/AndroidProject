@@ -1,7 +1,5 @@
 package fr.eseo.example.androidproject.api;
 
-import android.graphics.Bitmap;
-
 import java.io.Serializable;
 
 public class ProjectModel implements Serializable {

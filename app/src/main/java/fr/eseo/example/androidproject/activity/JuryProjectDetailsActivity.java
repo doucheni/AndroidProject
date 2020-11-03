@@ -284,7 +284,7 @@ public class JuryProjectDetailsActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(10, 20, 0, 0);
                 markView.setLayoutParams(params);
-                markView.setText(String.valueOf(mark.getMark()) + " / 20");
+                markView.setText(mark.getMark() + " / 20");
                 markView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorWhiteText));
                 Typeface face = ResourcesCompat.getFont(getApplicationContext(), R.font.roboto);
                 markView.setTypeface(face);

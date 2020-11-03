@@ -13,11 +13,11 @@ import fr.eseo.example.androidproject.api.Utils;
 
 public class AllProjectsAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
-    private AllProjectsActivity projActivity;
-    private SSLSocketFactory sslSocketFactory;
+    private final AllProjectsActivity projectActivity;
+    private final SSLSocketFactory sslSocketFactory;
 
-    public AllProjectsAsyncTask(AllProjectsActivity projActivity, SSLSocketFactory sslSocketFactory){
-        this.projActivity = projActivity;
+    public AllProjectsAsyncTask(AllProjectsActivity projectActivity, SSLSocketFactory sslSocketFactory){
+        this.projectActivity = projectActivity;
         this.sslSocketFactory = sslSocketFactory;
     }
 
@@ -28,7 +28,7 @@ public class AllProjectsAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected JSONObject doInBackground(String... params){
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         String urlProjects = params[0];
         String method = params[1];
 
@@ -40,6 +40,6 @@ public class AllProjectsAsyncTask extends AsyncTask<String, Void, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject){
-        this.projActivity.treatmentResult(jsonObject);
+        this.projectActivity.treatmentResult(jsonObject);
     }
 }

@@ -11,14 +11,14 @@ public class DataConverters {
             if (timestamp == null) {
                 return null;
             }
-            return new java.util.Date(timestamp.longValue());
+            return new java.util.Date(timestamp);
         }
         @TypeConverter
         public static Long toTimeStamp(java.util.Date date) {
             if (date == null) {
                 return null;
             }
-            return Long.valueOf(date.getTime());
+            return date.getTime();
         }
     }
 }

@@ -25,8 +25,7 @@ public class JuryActivityFragment extends Fragment {
     private static final String ARG_TOKEN = "token";
 
     private JuryModel jury;
-    private TextView textTitle;
-    private TextView juryNames;
+
 
     private String token;
     private Intent intent;
@@ -63,9 +62,9 @@ public class JuryActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_jury_summary_list, container, false);
 
-        textTitle = v.findViewById(R.id.summary_jury_id);
+        TextView textTitle = v.findViewById(R.id.summary_jury_id);
         textTitle.setText(String.valueOf(jury.getJuryId()));
-        juryNames = v.findViewById(R.id.summary_jury_name);
+        TextView juryNames = v.findViewById(R.id.summary_jury_name);
         List<UserModel> members = jury.getMembers();
         StringBuilder builder = new StringBuilder();
 

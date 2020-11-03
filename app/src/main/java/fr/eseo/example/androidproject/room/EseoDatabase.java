@@ -21,9 +21,8 @@ import fr.eseo.example.androidproject.room.entities.MarksStudents;
 import fr.eseo.example.androidproject.room.entities.MarksVisitor;
 import fr.eseo.example.androidproject.room.entities.Project;
 import fr.eseo.example.androidproject.room.entities.User;
-import fr.eseo.example.androidproject.room.entities.isMember;
 
-@Database(entities = {Jury.class, Project.class, User.class, MarksVisitor.class, CommentsVisitor.class, MarksJury.class, MarksStudents.class}, version = 5, exportSchema = true)
+@Database(entities = {Jury.class, Project.class, User.class, MarksVisitor.class, CommentsVisitor.class, MarksJury.class, MarksStudents.class}, version = 6)
 @TypeConverters(value = {DataConverters.Date.class})
 public abstract class EseoDatabase extends RoomDatabase {
     

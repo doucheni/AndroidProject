@@ -1,8 +1,5 @@
 package fr.eseo.example.androidproject.room.entities;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,17 +10,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Entity(tableName = "Jury")
 public class Jury implements Serializable {
 
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "idJury")
     private int idJury;
 
-    @NonNull
     @ColumnInfo(name = "date")
     private Date date;
 

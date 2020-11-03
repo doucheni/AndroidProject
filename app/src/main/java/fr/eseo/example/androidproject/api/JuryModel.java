@@ -2,7 +2,6 @@ package fr.eseo.example.androidproject.api;
 
 import java.io.Serializable;
 import java.util.List;
-import fr.eseo.example.androidproject.room.entities.User;
 
 public class JuryModel implements Serializable {
 

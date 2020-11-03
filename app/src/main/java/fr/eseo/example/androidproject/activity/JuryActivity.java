@@ -30,17 +30,14 @@ import fr.eseo.example.androidproject.fragments.JuryActivityFragment;
 
 
 public class JuryActivity extends AppCompatActivity {
-    private SSLSocketFactory sslSocket;
     public Toast errorRequestToast;
     private Toast errorResultToast;
     private ProgressDialog progressDialog;
-    private myJuryAsyncTask myJuryAsyncTask;
     public static final String JURY_ID = "jury_id";
     public static final String USERNAME ="username";
     public static final String TOKEN = "token";
     public  String username;
     public  String token;
-    private int jury_id;
     private Intent intent;
 
 
@@ -52,11 +49,11 @@ public class JuryActivity extends AppCompatActivity {
         token = intentJury.getStringExtra("TOKEN");
         username = intentJury.getStringExtra("USERNAME");
         final Context ctx = getApplicationContext();
-        sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
+        SSLSocketFactory sslSocket = Utils.configureSSLContext(ctx).getSocketFactory();
         errorRequestToast = Toast.makeText(JuryActivity.this, "Error during the request", Toast.LENGTH_LONG);
         errorResultToast = Toast.makeText(JuryActivity.this, "Your jury is not available", Toast.LENGTH_LONG);
         setContentView(R.layout.activity_jury);
-        myJuryAsyncTask = new myJuryAsyncTask(this, sslSocket);
+        myJuryAsyncTask myJuryAsyncTask = new myJuryAsyncTask(this, sslSocket);
         this.progressDialog = ProgressDialog.show(JuryActivity.this, "Loading", "Please wait ...", true);
         myJuryAsyncTask.execute("https://172.24.5.16/pfe/webservice.php?q=MYJUR&user=" + username + "&token=" + token, "GET");
 
@@ -73,7 +70,7 @@ public class JuryActivity extends AppCompatActivity {
                 JSONArray jsonJuries = jsonObject.getJSONArray("juries");
                 for(int i = 0; i < jsonJuries.length(); i++) {
                     JSONObject jsonJury = jsonJuries.getJSONObject(i);
-                     jury_id = jsonJury.getInt("idJury");
+                    int jury_id = jsonJury.getInt("idJury");
                     String jury_date = jsonJury.getString("date");
                     JSONObject jsonInfo = jsonJury.getJSONObject("info");
                     JSONArray jsonMembers = jsonInfo.getJSONArray("members");

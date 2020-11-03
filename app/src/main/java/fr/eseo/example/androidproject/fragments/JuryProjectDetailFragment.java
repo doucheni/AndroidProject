@@ -24,11 +24,6 @@ public class JuryProjectDetailFragment extends Fragment {
 
     private ProjectModel project;
     private View view;
-
-    private TextView titleProject;
-    private TextView descriptionProject;
-    private TextView confidProject;
-    private TextView supervisorProject;
     private EditText projectMarkET;
     private Button validateBTN;
 
@@ -66,10 +61,10 @@ public class JuryProjectDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
          view  = inflater.inflate(R.layout.fragment_jury_project_detail, container, false);
 
-        titleProject = view.findViewById(R.id.titleProject);
-        descriptionProject = view.findViewById(R.id.descriptionProject);
-        confidProject = view.findViewById(R.id.confidentialityProject);
-        supervisorProject = view.findViewById(R.id.supervisorProject);
+        TextView titleProject = view.findViewById(R.id.titleProject);
+        TextView descriptionProject = view.findViewById(R.id.descriptionProject);
+        TextView confidProject = view.findViewById(R.id.confidentialityProject);
+        TextView supervisorProject = view.findViewById(R.id.supervisorProject);
         this.projectMarkET = view.findViewById(R.id.project_mark);
         this.validateBTN = view.findViewById(R.id.btn_send_data);
 

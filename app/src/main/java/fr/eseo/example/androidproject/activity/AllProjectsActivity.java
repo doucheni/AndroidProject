@@ -37,7 +37,6 @@ public class AllProjectsActivity extends AppCompatActivity {
     public SSLSocketFactory sslSocketFactory;
     public Toast errorRequestToast;
     private Toast errorResultToast;
-    private AllProjectsAsyncTask commAsyncTask;
     private ProgressDialog progressDialog;
     private String token;
     private String username;
@@ -53,7 +52,7 @@ public class AllProjectsActivity extends AppCompatActivity {
         errorRequestToast = Toast.makeText(AllProjectsActivity.this, "Error during the request", Toast.LENGTH_LONG);
         errorResultToast = Toast.makeText(AllProjectsActivity.this, "Projects/Jury are not available", Toast.LENGTH_LONG);
         setContentView(R.layout.activity_all_projects);
-        commAsyncTask = new AllProjectsAsyncTask(this, sslSocketFactory);
+        AllProjectsAsyncTask commAsyncTask = new AllProjectsAsyncTask(this, sslSocketFactory);
         this.progressDialog = ProgressDialog.show(AllProjectsActivity.this,"Loading", "Please wait ...", true);
         String requestProject = "https://172.24.5.16/pfe/webservice.php?q=LIPRJ&user="+this.username+"&token="+this.token;
         commAsyncTask.execute(requestProject, "GET");

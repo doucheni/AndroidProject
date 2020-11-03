@@ -15,11 +15,11 @@ import fr.eseo.example.androidproject.room.entities.User;
 public interface UsersDao {
 
     @Query("SELECT * FROM Users")
-    public LiveData<List<User>> findAllUsers();
+    LiveData<List<User>> findAllUsers();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public void insert(User user);
+    void insert(User user);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    public void update(User user);
+    void update(User user);
 }
